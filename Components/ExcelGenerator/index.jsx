@@ -5,13 +5,13 @@
 import { useEffect } from 'react'
 import ExcelJS from 'exceljs'
 
-const ExcelGenerator = () => {
+const ExcelGenerator = (data) => {
 	useEffect(() => {
-		const data = [
-			{ name: 'John Doe', age: 30, email: 'john.doe@example.com' },
-			{ name: 'Jane Smith', age: 25, email: 'jane.smith@example.com' },
-			{ name: 'Bob Johnson', age: 35, email: 'bob.johnson@example.com' },
-		]
+		// const data = [
+		// 	{ name: 'John Doe', age: 30, email: 'john.doe@example.com' },
+		// 	{ name: 'Jane Smith', age: 25, email: 'jane.smith@example.com' },
+		// 	{ name: 'Bob Johnson', age: 35, email: 'bob.johnson@example.com' },
+		// ]
 
 		const columnWidths = [20, 10, 30] // Adjust the widths as needed for each column
 

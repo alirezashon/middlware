@@ -48,6 +48,7 @@ const hexagon = svgContainer
       const jsonData = [];
       worksheet.eachRow({ includeEmpty: true }, (row) => {
         const rowData = row.values.map((cell) => (cell ? cell.toString() : ''));
+     
         const filteredArray = rowData.filter((item) => item !== "null");
         jsonData.push(filteredArray);
       });

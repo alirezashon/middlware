@@ -37,33 +37,32 @@ const hexagon = svgContainer
 
   }, [hexagonColor]);
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    setHexagonColor(['#a5cd39' , '#499b01'])
-    try {
-      const workbook = new ExcelJS.Workbook();
-      await workbook.xlsx.load(file);
+ const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  setHexagonColor(['#a5cd39', '#499b01']);
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(file);
 
-      const worksheet = workbook.getWorksheet(1); // Assuming you want to read the first sheet
-      const Serials = []; // Array to store serials
-      const jsonData = [];
-      worksheet.eachRow({ includeEmpty: true }, (row) => {
-        const rowData = row.values.map((cell) => (cell ? cell.toString() : ''));
-        const filteredArray = rowData.filter((item) => item !== "null");
-        jsonData.push(filteredArray);
-        
-        const serial = filteredArray[2]; // Assuming the serial is in the second column
-        if (serial) {
-          Serials.push(serial); // Add the serial to the Serials array
-       }
-      });
+    const worksheet = workbook.getWorksheet(1); // Assuming you want to read the first sheet
+    const jsonData = [];
+    const Serials = worksheet.getColumn('G').values
+      .map((cell) => (cell ? cell.toString() : ''))
+      .filter((item) => item !== 'null');
+  
+    worksheet.eachRow({ includeEmpty: true }, (row) => {
+      const rowData = row.values.map((cell) => (cell ? cell.toString() : ''));
+      const filteredArray = rowData.filter((item) => item !== 'null');
+      jsonData.push(filteredArray);
+    });
 
-      setExcelData(jsonData);
-      setExcelData1(Serials);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    setExcelData(jsonData);
+    setExcelData1(Serials.slice(1));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <div>

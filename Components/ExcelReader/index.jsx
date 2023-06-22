@@ -5,6 +5,7 @@ import ExcelJS from 'exceljs';
 const ExcelReader = () => {
 const fileInputRef = useRef(null);
 const [excelData, setExcelData] = useState([]);
+const [excelData1, setExcelData1] = useState([]);
 const [hexagonColor, setHexagonColor] = useState(["yellow", "green"]);
 //------------------------------D3--------------------------------
   useEffect(() => {
@@ -36,26 +37,32 @@ const hexagon = svgContainer
 
   }, [hexagonColor]);
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    setHexagonColor(['#a5cd39' , '#499b01'])
-    try {
-      const workbook = new ExcelJS.Workbook();
-      await workbook.xlsx.load(file);
+ const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  setHexagonColor(['#a5cd39', '#499b01']);
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(file);
 
-      const worksheet = workbook.getWorksheet(1); // Assuming you want to read the first sheet
+    const worksheet = workbook.getWorksheet(1); // Assuming you want to read the first sheet
+    const jsonData = [];
+    const Serials = worksheet.getColumn('G').values
+      .map((cell) => (cell ? cell.toString() : ''))
+      .filter((item) => item !== 'null');
+  
+    worksheet.eachRow({ includeEmpty: true }, (row) => {
+      const rowData = row.values.map((cell) => (cell ? cell.toString() : ''));
+      const filteredArray = rowData.filter((item) => item !== 'null');
+      jsonData.push(filteredArray);
+    });
 
-      const jsonData = [];
-      worksheet.eachRow({ includeEmpty: true }, (row) => {
-        const rowData = row.values.map((cell) => (cell ? cell.toString() : ''));
-        jsonData.push(rowData);
-      });
+    setExcelData(jsonData);
+    setExcelData1(Serials.slice(1));
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-      setExcelData(jsonData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div>
@@ -74,6 +81,14 @@ const hexagon = svgContainer
       {excelData.length > 0 && (
         <ul>
           {excelData.map((row, index) => (
+            <li key={index}>{JSON.stringify(row)}</li>
+          ))}
+        </ul>
+      )}
+
+     {excelData1.length > 0 && (
+        <ul>
+          {excelData1.map((row, index) => (
             <li key={index}>{JSON.stringify(row)}</li>
           ))}
         </ul>

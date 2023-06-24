@@ -175,7 +175,7 @@ const newData = excelData
   </tbody>
       </table>
       
-      <h1>bia boro onvar dg sharaf poor dos doctor</h1>
+      <h1>SPLIOTING</h1>
 
       <table className="data-table">
   <thead>

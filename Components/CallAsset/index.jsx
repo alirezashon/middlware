@@ -33,7 +33,7 @@ export default function YourComponent(SerialArray) {
   return (
     <div>
       <button onClick={handleFetchData}>Fetch Data</button>
-      <div>{JSON.stringify(response)}</div>
+      <div><br>{JSON.stringify(response)}</br></div>
     </div>
   );
 }

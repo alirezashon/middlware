@@ -10,7 +10,7 @@ export default async function handler(
   try {
     const dataArray = JSON.parse(data)
 
-    const columnWidths = [20, 10, 30] // Adjust the widths as needed for each column
+    const columnWidths = [22, 22, 22, 27, 29, 39, 22, 22, 22, 29 ] // Adjust the widths as needed for each column
 
     // Create a new workbook
     const workbook = new ExcelJS.Workbook()
@@ -25,7 +25,7 @@ export default async function handler(
       pattern: 'solid',
       fgColor: { argb: 'FF91D2FF' }, // Red color
     }
-    headerRow.values = ['Name', 'Age', 'Email','Memail']
+    headerRow.values = ['Asset Code', 'Asset Name', 'Category', 'Serial NO', 'Status', 'AssetLocation', 'IMEI', 'MAC', 'IMSI', 'ICCID']
     worksheet.columns = columnWidths.map((width) => ({ width }))
 
     // Set font properties for header row
@@ -33,8 +33,8 @@ export default async function handler(
     headerRow.font = headerFont
 
     // Add data rows and adjust column widths
-    dataArray.forEach((row: { name: string; age: number; email: string }, index: number) => {
-      const dataRow = worksheet.addRow([row.name, row.age, row.email])
+    dataArray.forEach((row: { assetCode: string; assetName: string; category: string; serial: string; status: string; location: string; imei: string; mac: string; imsi: string; iccid: string; }, index: number) => {
+      const dataRow = worksheet.addRow([row.assetCode, row.assetName, row.category, row.serial, row.status, row.location, row.imei, row.mac, row.imsi, row.iccid])
       dataRow.eachCell((cell, colNumber) => {
         cell.fill = {
           type: 'pattern',

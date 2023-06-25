@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-export const createHexagonImage = (url, size, x, y) => {
+export const createHexagonImage = (url, size, border, x, y) => {
   const svg = d3.create('svg');
 
   const hexagonSize = size;
@@ -27,7 +27,7 @@ export const createHexagonImage = (url, size, x, y) => {
     .attr('d', largerHexagonPath(d3.range(6)))
     .attr('transform', `translate(${largerHexagonSize},${largerHexagonSize})`)
     .attr('fill', 'white')
-    .attr('stroke', 'gold')
+    .attr('stroke', border)
     .attr('stroke-width', 2);
 
   const imagePatternId = `image-pattern-${Math.random().toString(36).substr(2, 9)}`; // Generate unique ID

@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import ExcelJS from 'exceljs'
+import { ToastContainer, Zoom, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css' 
 import { createHexagonImage } from './HexagonModel/createHexagonImage'
 
 const ExcelReader = () => {
@@ -206,9 +208,22 @@ const ExcelReader = () => {
 		generateExcel()
 	}
 
-	//////////////////////////end/of/API/Calling///////////////////////////////////
-	return (
+  const sendToast = () =>{
+  toast.info(` selected to this location`)
+  }
+  
+  return (
 		<div>
+      		<ToastContainer
+				position='top-center'
+				autoClose={3000}
+				hideProgressBar
+				newestOnTop
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				transition={Zoom}
+			/>
 			<svg
 				ref={svgRef}
 				width='100%'
@@ -221,9 +236,12 @@ const ExcelReader = () => {
 				ref={fileInputRef}
 				onChange={handleFileChange}
 			/>
-			{existData && existData.length > 0 && (
-				<button onClick={handleGenerateExcel}>Generate Excel</button>
-			)}
+		{!existData || (existData && existData.length === 0) ? (
+      sendToast()
+) : (
+  <button onClick={handleGenerateExcel}>Generate Excel</button>
+)}
+
 			<table className='contradiction-table'>
 				<thead>
 					<tr>

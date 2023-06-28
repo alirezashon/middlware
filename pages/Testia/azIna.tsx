@@ -1,14 +1,31 @@
-import Modal from '../../Components/Modal'
+// import Modal from '../../Components/Modal'
 
 
-const index = () => {
+// const index = () => {
   
+//   return (
+//     <>
+//     <Modal/>
+//     </>
+// )
+
+// }
+
+// export default index
+
+
+
+
+import React from 'react';
+import { ContextProvider } from '../../Contexts/DiagramContext';
+import SampleComponent from './AZ';
+
+const App: React.FC = () => {
   return (
-    <>
-    <Modal/>  
-    </>
-)
+    <ContextProvider>
+      <SampleComponent />
+    </ContextProvider>
+  );
+};
 
-}
-
-export default index
+export default App;

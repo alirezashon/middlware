@@ -1,0 +1,106 @@
+.openButton {
+    background-color: #a5cd39;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.openButton:hover {
+    background-color: #90b727;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.selectContainer {
+    margin-bottom: 20px;
+}
+
+.select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease-in-out;
+    background-color: #fff;
+    color: #333;
+}
+
+.select:hover {
+    border-color: #a5cd39;
+}
+
+.select:focus {
+    outline: none;
+    border-color: #a5cd39;
+    box-shadow: 0 0 5px rgba(165, 205, 57, 0.3);
+}
+
+.select option {
+    padding: 8px;
+    background-color: #e4f6b7;
+    color: #08a108;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.select option:hover {
+    background-color: #a5cd39;
+    color: white;
+}
+.error {
+    color: red;
+    margin-top: 5px;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.acceptButton {
+    background-color: #a5cd39;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.acceptButton:hover {
+    background-color: #90b727;
+}
+
+.rejectButton {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.rejectButton:hover {
+    background-color: #d32f2f;
+}

@@ -1,16 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const requestBody = {
-    userId: '3198',
-    assetcode: 'AST2022305935',
-    status: 'Contractor---Intact',
-     agentCode: '',
-    location: " ",
-    allottedto: 'customer@test.ir',
-    isCustomUpdate: true,
-    remark: 'memark',
-  }
+  //  const { assetCode, status } = req.body;
+
+    const requestBody = {
+      userId: '3198',
+      assetcode: 'AST2023340607',
+      status:'Mobinnet---Intact_Second-hand',
+      location: "Warehouse > Modem's Store (M003)",
+      allottedto: 'customer@test.ir',
+      isCustomUpdate: true,
+      remark: 'remark',
+    };
 
   try {
     const apiURL = 'http://localhost:8080/api/updateAsset'

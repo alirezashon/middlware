@@ -1,18 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  //  const { assetCode, status } = req.body;
   const requestBody = {
-    userId: '3198',
-    assetcode: 'AST2023336056',
-    status: 'Contractor---Intact',
-    location: 'Customer Location > Region 4 > Esfahan > Badrud',
-    customerDetails: 'BR-7777',
-    childAssetcode: 'AST2022306533',
-    customerName: 'AKBARIOVIC',
-    agentCode: 10000000,
+    userId: '3198', 
+    assetcode: 'AST2023340599',
+    status: 'Contractor---Damaged',
+    location: '',
+    customerDetails: '',
+    childAssetcode: '',
+    customerName: '',
+    agentCode: 12345678,
     isRemoveLink: 0,
     allottedto: '3107',
-    settlementType:'خرید در کف فروش در سقف'
+    settlementType:''
   }
 
   try {

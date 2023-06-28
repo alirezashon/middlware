@@ -208,8 +208,8 @@ const ExcelReader = () => {
 		generateExcel()
 	}
 
-  const sendToast = () =>{
-  toast.info(` selected to this location`)
+	const sendToast = () => {
+//   toast.info(` selected to this location`)
   }
   
   return (

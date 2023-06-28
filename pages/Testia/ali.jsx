@@ -1,31 +1,36 @@
-import { read, utils } from 'xlsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const ExcelReader = () => {
-  const [excelData, setExcelData] = useState([]);
+const MyPage = (props) => {
+  const [data, setData] = useState([
+    { assetCode: 'AST2022305935', status: 'Contractor---Intact' },
+    { assetCode: 'AST2023333530', status: 'Contractor---Intact' },
+    // Add more objects to the data array as needed
+  ]);
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+  const [responses, setResponses] = useState([]);
 
+  const fetchData = async () => {
     try {
-      const reader = new FileReader();
+      const updatedResponses = [];
 
-      reader.onload = (e) => {
-        const fileData = new Uint8Array(e.target.result);
-        const workbook = read(fileData, { type: 'array' });
+      for (const item of data) {
+        const response = await fetch('/api/Post/updateInstall', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(item),
+        });
 
-        const sheetName = workbook.SheetNames[0]; // Assuming you want to read the first sheet
-        const worksheet = workbook.Sheets[sheetName];
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
 
-        const jsonData = utils.sheet_to_json(worksheet, { header: 1 });
-        setExcelData(jsonData);
-      };
+        const responseData = await response.json();
+        updatedResponses.push(responseData);
+      }
 
-      reader.onerror = (error) => {
-        console.error(error);
-      };
-
-      reader.readAsArrayBuffer(file);
+      setResponses(updatedResponses);
     } catch (error) {
       console.error(error);
     }
@@ -33,17 +38,25 @@ const ExcelReader = () => {
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
+      {data.map((item, index) => (
+        <div key={index}>
+          <span>Asset Code: {item.assetCode}</span>
+          <span>Status: {item.status}</span>
+        </div>
+      ))}
+      <button onClick={fetchData}>fetch metch</button>
 
-      {excelData.length > 0 && (
-        <ul>
-          {excelData.map((row, index) => (
-            <li key={index}>{JSON.stringify(row)}</li>
-          ))}
-        </ul>
-      )}
+      <div>
+        <h2>Responses:</h2>
+        {responses.map((response, index) => (
+          <div key={index}>
+            <span>Response {index + 1}: </span>
+            <pre>{JSON.stringify(response, null, 2)}</pre>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default ExcelReader;
+export default MyPage;

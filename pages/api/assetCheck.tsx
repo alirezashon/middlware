@@ -22,12 +22,6 @@ export default async function handler(
 	})
 
 	const data = await response.json()
-	const test = data.data
-	const simplifiedResponse: AssetData[] = test.map((item: any) => ({
-		AssetCode: item.AssetCode,
-		CategoryName: item.CategoryName,
-		Serial: item.Serial,
-	}))
 
 	res.status(200).json(data.data)
 }

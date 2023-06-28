@@ -3,7 +3,7 @@ body{
 }
 
 button {
-    background-color: #4caf50;
+    background-color: #a5cd39;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -66,3 +66,296 @@ button:active {
     background-color: #f9f9f9;
 }
 
+
+
+
+.diagram-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.scrollable-container {
+    height: 100vh;
+    width: 96%;
+    margin-left: 2%;
+    background-color: #fefdf3;
+    /* Adjust the height as needed */
+    overflow-y: auto;
+}
+
+/* Rest of your CSS styles */
+
+
+.diagram-box button {
+    background-color: #e97115;
+    color: #fff;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.diagram-box button:hover {
+    background-color: #e26f31;
+}
+.buttons-box{
+    display: flex;
+    justify-content: space-between;
+}
+.update-button {
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+
+/* CSS for Checkbox */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #f03c3c;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 50%;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #a5cd39;
+    border: 1px solid #499b01;
+}
+
+/* CSS for Checkbox Animation */
+input[type="checkbox"]:not(:checked) {
+    position: relative;
+}
+
+input[type="checkbox"]:not(:checked):before,
+input[type="checkbox"]:not(:checked):after {
+    content: "";
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 2px;
+    background-color: #cb0707;
+    transition: transform 0.3s ease;
+}
+
+input[type="checkbox"]:not(:checked):before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+input[type="checkbox"]:not(:checked):after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* progress */
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-value {
+    text-align: center;
+    height: 100%;
+    background-color: #a5cd39;
+    transition: width 0.3s ease-in-out;
+}
+
+
+
+
+
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-in-out;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.accept-button,
+.reject-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.accept-button {
+    background-color: #499b01;
+    color: white;
+    margin-right: 10px;
+}
+
+.reject-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.accept-button:hover,
+.reject-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0.1;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-900px);
+     
+    }
+
+    to {
+        transform: translateY(-110px);
+ 
+    }
+}
+
+
+
+.select-container {
+    margin-bottom: 20px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease-in-out;
+}
+
+select:hover {
+    border-color: #a5cd39;
+}
+
+select:focus {
+    outline: none;
+    border-color: #a5cd39;
+    box-shadow: 0 0 5px rgba(165, 205, 57, 0.3);
+}
+
+select option {
+    padding: 8px;
+    background-color: #fff;
+    color: #333;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+select option:hover {
+    background-color: #a5cd39;
+    color: #fff;
+}
+
+.error {
+    color: red;
+    margin-top: 5px;
+}
+
+/* Styling the dropdown arrow */
+select::-ms-expand {
+    display: none;
+}
+
+select::after {
+    content: '▼';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+
+
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 11px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #eaec5a;
+    background-color: #e7f8d0;
+    border-radius: 4px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #a5cd39;
+    border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #499b01;
+}

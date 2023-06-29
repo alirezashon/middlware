@@ -332,7 +332,18 @@ select::after {
 
 
 
-
+.background_gif {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: #1d0101 url(https://cutewallpaper.org/21/matrix-background-gif/Free-Binary-Code-4K-Long-Loop-Screensaver-GIF.gif) center center/auto repeat;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.8;
+}
 
 
 

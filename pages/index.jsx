@@ -4,50 +4,99 @@ import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import ExcelJS from 'exceljs'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css' 
-import { createHexagonImage } from './HexagonModel/createHexagonImage'
-
+import 'react-toastify/dist/ReactToastify.css'
+import { createHexagonImage } from '../Components/createHexagonImage'
+import CheckList from '../Components/CheckList'
+import Table from '../Components/Table'
+import GenerateExcel from '../Components/GenerateExcel'
 const ExcelReader = () => {
-  const fileInputRef = useRef(null)
+	const fileInputRef = useRef(null)
 	const svgRef = useRef(null)
 	const [response, setResponse] = useState('')
 	const [excelData, setExcelData] = useState([])
 	const [excelData1, setExcelData1] = useState([])
 	const [hexagonColor, setHexagonColor] = useState('gold')
 	const [excelHeader, setExcelHeader] = useState([])
+	const [progress, setProgress] = useState(0)
 
 	useEffect(() => {
-    const svg = d3.select(svgRef.current)
-    const { width, height } = svg.node().getBoundingClientRect()
+		const svg = d3.select(svgRef.current)
+		const { width, height } = svg.node().getBoundingClientRect()
 
 		if (setHexagonColor) {
 			d3.select(svg.current).selectAll('*').remove()
-    }
-	if (svgRef.current) {
-		d3.select(svgRef.current).selectAll('*').remove()
-	}
-    const hexagonImage = createHexagonImage('/images/logo.jpg', 55,hexagonColor )
-	d3.select(hexagonImage)
-		.attr('x', width / 2 - 110 )
-		.attr('y',  height / 4 - 55 )
-    .attr('cursor', 'grab')
-		.call(
-			d3.drag().on('drag', (event) => {
-				const newX = event.x - 33
-				const newY = event.y - 33
-				d3.select(hexagonImage).attr('x', newX).attr('y', newY)
-			})
+		}
+		if (svgRef.current) {
+			d3.select(svgRef.current).selectAll('*').remove()
+		}
+
+		const hexagonImage = createHexagonImage(
+			'/images/logo.jpg',
+			55,
+			hexagonColor
 		)
-    .on('click', () => {
-      fileInputRef.current.click()
-    })
+		const circleRadius = 2 * 55 // 2 times the hexagon size
 
-	// Append the hexagon image to the SVG
-	svg
-		.node()
-		.appendChild(hexagonImage)
+		// Append the circle to the SVG
+		const Maincircle = svg
+			.append('circle')
+			.attr('cx', width / 2)
+			.attr('cy', progress === 0 || progress === 100 ? height / 3 : height / 2)
+			.attr('r', circleRadius)
+			.attr('fill', 'none')
+			.attr('stroke', '#f0f0f0')
+			.attr('stroke-width', 2)
 
-	}, [hexagonColor])
+		const circle = svg
+			.append('circle')
+			.attr('cx', width / 2)
+			.attr('cy', progress === 0 || progress === 100 ? height / 3 : height / 2)
+			.attr('r', circleRadius)
+			.attr('fill', 'none')
+			.attr('stroke', 'yellow')
+			.attr('stroke-width', 2)
+
+		const hexagonContainer = svg.append('g')
+
+		// Append the hexagon image to the SVG
+		hexagonContainer.node().appendChild(hexagonImage)
+
+		// Position and interact with the hexagon image
+		d3.select(hexagonImage)
+			.attr('x', width / 2 - 59)
+			.attr(
+				'y',
+				progress === 0 || progress === 100 ? height / 3 - 59 : height / 2 - 59
+			)
+			.attr('cursor', 'grab')
+			.call(
+				d3
+					.drag()
+					.on('drag', (event) => {
+						const newX = event.x - 33
+						const newY = event.y - 33
+						d3.select(hexagonImage).attr('x', newX).attr('y', newY)
+					})
+					.on('end', () => {
+						d3.select(hexagonImage)
+							.attr('x', width / 2 - 55)
+							.attr('y', height / 3 - 55)
+					})
+			)
+			.on('click', () => {
+				fileInputRef.current.click()
+			})
+
+		// Update the circle based on the progress percentage
+		const progressPercentage = progress + '%'
+		const circumference = 2 * Math.PI * circleRadius
+		const progressOffset = circumference * (1 - progress / 100)
+
+		circle
+			.attr('stroke-dasharray', `${circumference} ${circumference}`)
+			.attr('stroke-dashoffset', progressOffset)
+	}, [hexagonColor, progress])
+
 	/////////////////////////////end/of/hexagon/creating///////////////////////////////////////////
 
 	const handleFileChange = async (event) => {
@@ -84,6 +133,9 @@ const ExcelReader = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				const totalRequests = excelData1.length
+				let receivedResponses = 0
+
 				const responses = await Promise.all(
 					excelData1.map(async (serial) => {
 						try {
@@ -97,12 +149,17 @@ const ExcelReader = () => {
 							})
 
 							const data = await response.json()
+
+							receivedResponses++
+							setProgress((receivedResponses / totalRequests) * 100)
+
 							return data
 						} catch (error) {
 							console.error('Error:', error)
 						}
 					})
 				)
+
 				setResponse(responses)
 			} catch (error) {
 				console.error('Error:', error)
@@ -113,6 +170,7 @@ const ExcelReader = () => {
 			fetchData()
 		}
 	}, [excelData1])
+	console.log(progress)
 
 	const existData = response
 		? response.reduce((acc, array) => {
@@ -143,8 +201,9 @@ const ExcelReader = () => {
 			matchingArray && matchingArray[4].split('>').slice(-1)[0] !== obj.category
 		)
 	})
-	console.log(Contradiction)
-
+	const filteredExistData = existData.filter(
+		(obj) => !Contradiction.some((item) => item.serial === obj.serial)
+	)
 	const newItems = excelData.filter((item) =>
 		item.every(
 			(value) => !existData.some((existData) => existData.serial === value)
@@ -152,129 +211,65 @@ const ExcelReader = () => {
 	)
 	const newRows = newItems.map((array) => array.slice(1))
 
-	// newData contains rows that exist in rowData but not in existData
 
-	// {  assetCode: 'John Doe', assetName: 77, category: 'john.doe@example.com', serial:'onjash', status:'test', location:'mest', imei:'fest', mac:'jest', imsi:'fest', iccid:'rest' },
 
-	//generateExcelByData
+	return (
+		<>
+			<div
+				style={
+					progress == 0
+						? {
+								height: '120vh',
+								backgroundImage:
+									'radial-gradient(circle at 50% 50%, #cdeb97 46.67%, #ddf1c8 20.33%, #dae7b9 50%, #e5f3a7 26.67%, #d8e7c0 83.33%, #d7e9a8 10%, #d9ebbd)',
+						  }
+						: {}
+				}>
+				<svg
+					className='svg-container'
+					style={{
+						backgroundColor:
+							progress === 0 || progress === 100
+								? 'rgba(0,0,0,0)'
+								: 'rgba(40,40,40,0.9)',
+						width: progress === 0 ? '100%' : '20%',
+						height: progress === 0 ? '177vh' : '40vh',
+						marginLeft: progress === 0 ? '0' : '40%',
+						borderRadius: progress === 0 ? '0' : '100%',
+					}}
+					ref={svgRef}></svg>
+				{progress > 0 && progress < 100 && <div class='background_gif'> </div>}
+				
+				{progress === 100 && newRows.length > 0 && (
+					<GenerateExcel
+						rows={newRows}
+						cells={excelHeader}
+					/>
+				)}
 
-	const generateExcel = async () => {
-		const url = '/api/test' // Replace with the appropriate API URL
-
-		const requestBody = {
-			header: excelHeader,
-			rows: newRows,
-			font: { name: 'Arial', size: 12 }, // Optional: Customize the font properties
-			headerBgColor: 'ff499b01', // Optional: Provide a custom background color (in ARGB format)
-			cellBgColor: 'ffa5cd39',
-			headerFontColor: 'ffffffff',
-			cellFontColor: 'ffffffff',
-			columnWidths: [
-				20, 33, 22, 33, 44, 55, 66, 77, 11, 22, 44, 33, 66, 44, 22, 10, 10, 10,
-				10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
-				10, 10, 10, 10, 10, 10, 10, 10, 10, 40, 40, 40, 40, 70, 10, 10, 10, 10,
-				10,
-			],
-		}
-
-		try {
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(requestBody),
-			})
-
-			if (response.ok) {
-				const blob = await response.blob()
-				const downloadLink = document.createElement('a')
-				downloadLink.href = URL.createObjectURL(blob)
-				downloadLink.download = 'generated_file.xlsx'
-				downloadLink.click()
-			} else {
-				console.error(
-					'Failed to generate Excel file:',
-					response.status,
-					response.statusText
-				)
-			}
-		} catch (error) {
-			console.error('An error occurred:', error)
-		}
-	}
-
-	const handleGenerateExcel = () => {
-		generateExcel()
-	}
-
-	const sendToast = () => {
-//   toast.info(` selected to this location`)
-  }
-  
-  return (
-		<div>
-      		<ToastContainer
-				position='top-center'
-				autoClose={3000}
-				hideProgressBar
-				newestOnTop
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				transition={Zoom}
-			/>
-			<svg
-				ref={svgRef}
-				width='100%'
-				height='40vh'></svg>
-
-			<input
-				type='file'
-				style={{ display: 'none' }}
-				accept='.xlsx, .xls'
-				ref={fileInputRef}
-				onChange={handleFileChange}
-			/>
-		{!existData || (existData && existData.length === 0) ? (
-      sendToast()
-) : (
-  <button onClick={handleGenerateExcel}>Generate Excel</button>
-)}
-
-			<table className='contradiction-table'>
-				<thead>
-					<tr>
-						{Contradiction.length > 0 &&
-							Object.keys(Contradiction[0]).map((key) => (
-								<th key={key}>{key}</th>
-							))}
-					</tr>
-				</thead>
-				<tbody>
-					{Contradiction.map((row, index) => (
-						<tr key={index}>
-							{Object.entries(row).map(([key, value], index) => (
-								<td
-									key={index}
-									style={
-										key === 'category' ? { backgroundColor: '#fa7d5a' } : null
-									}>
-									{value}
-								</td>
-							))}
-						</tr>
-					))}
-					{existData.map((row, index) => (
-						<tr key={index}>
-							{Object.entries(row).map(([key, value], index) => (
-								<td key={index}>{value}</td>
-							))}
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
+				<input
+					type='file'
+					style={{ display: 'none' }}
+					accept='.xlsx, .xls'
+					ref={fileInputRef}
+					onChange={handleFileChange}
+				/>
+				<div className='buttons-box'>
+					{/* {!existData || (existData && existData.length === 0) ? (
+						sendToast()
+					) : (
+						<button onClick={handleGenerateExcel}>Generate Excel</button>
+					)} */}
+				</div>
+				<Table
+					existData={filteredExistData}
+					contradictionData={Contradiction}
+				/>
+				{filteredExistData.length > 0 && (
+					<CheckList sampleData={filteredExistData} />
+				)}
+			</div>
+		</>
 	)
 }
 

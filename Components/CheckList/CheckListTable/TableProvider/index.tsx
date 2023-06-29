@@ -1,14 +1,18 @@
 import React, { useContext, useEffect } from 'react';
-import CheckListTable from '../../Components/CheckList/CheckListTable';
-import { ShowDiagramContext } from '../../Contexts/DiagramContext';
-import { CheckedItemsContext } from '../../Contexts/CheckedItemsContext';
-
+import CheckListTable from '../../../../Components/CheckList/CheckListTable';
+import { ShowDiagramContext } from '../../../../Contexts/DiagramContext';
+import { CheckedItemsContext } from '../../../../Contexts/CheckedItemsContext';
+import LocalStorageButton from '../../LocalStorageButton';
 interface DataItem {
   serial: string;
   // Add other properties here
 }
 
-const SampleComponent = () => {
+interface SampleComponentProps {
+  sampleData: DataItem[]; 
+}
+
+const SampleComponent: React.FC<SampleComponentProps> = ({ sampleData }) => {
   const { showDiagram, setShowDiagram } = useContext(ShowDiagramContext);
   const { checkedItems, setCheckedItems } = useContext(CheckedItemsContext);
 
@@ -25,20 +29,13 @@ const SampleComponent = () => {
     }
   }, [setCheckedItems]);
 
-  // Sample data
-  const sampleData: DataItem[] = [
-    { serial: 'A001' },
-    { serial: 'A002' },
-    { serial: 'A003' },
-    // Add more data items as needed
-  ];
-
   const handleShowDiagramClick = () => {
     setShowDiagram(!showDiagram); // Toggle the value of showDiagram
   };
 
   return (
-    <div>
+	  <div>
+		  <LocalStorageButton/>
       <button onClick={handleShowDiagramClick}>
         {showDiagram ? 'Hide Diagram' : 'Show Diagram'}
       </button>
@@ -54,6 +51,3 @@ const SampleComponent = () => {
 };
 
 export default SampleComponent;
-
-
-

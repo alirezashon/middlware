@@ -3,8 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import ExcelJS from 'exceljs'
-import { ToastContainer, Zoom, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import { createHexagonImage } from '../Components/createHexagonImage'
 import CheckList from '../Components/CheckList'
 import Table from '../Components/Table'
@@ -211,8 +209,6 @@ const ExcelReader = () => {
 	)
 	const newRows = newItems.map((array) => array.slice(1))
 
-
-
 	return (
 		<>
 			<div
@@ -239,27 +235,20 @@ const ExcelReader = () => {
 					}}
 					ref={svgRef}></svg>
 				{progress > 0 && progress < 100 && <div class='background_gif'> </div>}
-				
-				{progress === 100 && newRows.length > 0 && (
-					<GenerateExcel
-						rows={newRows}
-						cells={excelHeader}
-					/>
-				)}
-
 				<input
 					type='file'
 					style={{ display: 'none' }}
 					accept='.xlsx, .xls'
 					ref={fileInputRef}
 					onChange={handleFileChange}
-				/>
-				<div className='buttons-box'>
-					{/* {!existData || (existData && existData.length === 0) ? (
-						sendToast()
-					) : (
-						<button onClick={handleGenerateExcel}>Generate Excel</button>
-					)} */}
+					/>
+						<div className='buttons-box'>
+					{progress === 100 && newRows.length > 0 && (
+						<GenerateExcel
+							rows={newRows}
+							cells={excelHeader}
+						/>
+					)}
 				</div>
 				<Table
 					existData={filteredExistData}

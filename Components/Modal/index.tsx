@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import styles from './Modal.module.css';
 
-const Modal: React.FC = () => {
+interface ModalProps {
+  onSelectStatus: (selectedStatus: string) => void;
+}
+
+const Modal: React.FC<ModalProps> = ({ onSelectStatus }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [error, setError] = useState('');
@@ -18,7 +22,7 @@ const Modal: React.FC = () => {
 
   const handleAccept = () => {
     if (selectedStatus) {
-      // Handle accept action here
+      onSelectStatus(selectedStatus); // Pass selectedStatus to the callback prop
       closeModal();
     } else {
       setError('Please select a status.');
@@ -26,7 +30,6 @@ const Modal: React.FC = () => {
   };
 
   const handleReject = () => {
-    // Handle reject action here
     closeModal();
   };
 
@@ -37,18 +40,20 @@ const Modal: React.FC = () => {
 
   return (
     <div>
-      <button className={styles.openButton} onClick={openModal}>Open Modal</button>
+      <button className={styles.openButton} onClick={openModal}>
+        choose status
+      </button>
 
       {isModalOpen && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <h2>please select status</h2>
+            <h2>Please select status</h2>
             <div className={styles.radioContainer}>
               <label className={styles.radioButton}>
                 <input
                   type="radio"
-                  value="status1"
-                  checked={selectedStatus === "status1"}
+                  value="Mobinnet---Intact_New"
+                  checked={selectedStatus === 'Mobinnet---Intact_New'}
                   onChange={handleStatusChange}
                 />
                 <span className={styles.radioLabel}>Mobinnet---Intact_New</span>
@@ -56,8 +61,8 @@ const Modal: React.FC = () => {
               <label className={styles.radioButton}>
                 <input
                   type="radio"
-                  value="status2"
-                  checked={selectedStatus === "status2"}
+                  value="Mobinnet---Intact_Second-hand"
+                  checked={selectedStatus === 'Mobinnet---Intact_Second-hand'}
                   onChange={handleStatusChange}
                 />
                 <span className={styles.radioLabel}>Mobinnet---Intact_Second-hand</span>

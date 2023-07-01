@@ -1,5 +1,5 @@
 .openButton {
-    background-color: #a5cd39;
+    background-color: #88b705;
     color: white;
     padding: 8px 16px;
     border: none;
@@ -9,7 +9,7 @@
 }
 
 .openButton:hover {
-    background-color: #90b727;
+    background-color: #81ab0f;
 }
 
 .modal {
@@ -27,6 +27,7 @@
     /* Add this line */
     position: absolute;
     opacity: 1;
+    z-index: 1;
 }
 
 .modalContent {

@@ -4,7 +4,9 @@ import React, { useContext, useEffect,useState } from 'react'
 import { CheckedItemsContext } from '../../../Contexts/CheckedItemsContext'
 import { ShowDiagramContext } from '../../../Contexts/DiagramContext'
 import UpdateAsset from '../../UpdateAsset'
-
+import Modal from '../../Modal'
+import styles from './CheckListTable.module.css'
+import { MdBackspace } from 'react-icons/md'
 interface DataItem {
   assetCode: string;
   // Add other properties here
@@ -14,7 +16,12 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
   const { checkedItems, setCheckedItems } = useContext(CheckedItemsContext);
   const { showDiagram, setShowDiagram } = useContext(ShowDiagramContext);
   const [assetCodes, setAssetCodes] = useState<string[]>([]); // New state for asset codes
-
+  const [selectedItem, setSelectedItem] = useState('')
+//config the setselected , for choose option of status from the modal
+	const handleStatusSelected = (selectedStatus: string) => { 
+		setSelectedItem(selectedStatus)
+	}
+	
   useEffect(() => {
     // Save checkedItems to local storage whenever it changes
     localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
@@ -81,27 +88,33 @@ console.log(assetCodes)
 	return (
 		<div>
 			{showDiagram && (
-				<div className='diagram-box'>
-					<div className='scrollable-container'>
-						<div className='buttons-box'>
+				<div className={styles.diagramBox}>
+					<div className={styles.scrollableContainer}>
+						<div className={styles.buttonsBox}>
 							<button
-								className='update-button'
+								style={{ backgroundColor: '#ffa20d' }}
+								className={styles.closeButton}
 								onClick={handleCloseClick}>
-								Close
+								<MdBackspace />
 							</button>
-							<button
-								className='update-button'
-								style={{ backgroundColor: '#a5cd39' }}
-								onClick={handleUpdateSubmit}>
-								Update
-							</button>
+							{selectedItem.length > 0 ? (
+								<button
+									style={{ backgroundColor: '#499b01' }}
+									className={`${styles.updateButton} ${styles.greenButton}`}
+									onClick={handleUpdateSubmit}>
+									Update
+								</button>
+							) : (
+								<Modal onSelectStatus={handleStatusSelected} />
+							)}
 						</div>
-						<table className='contradiction-table'>
+						<table className={styles.contradictionTable}>
 							<thead>
 								<tr>
 									<th>
 										<input
 											type='checkbox'
+											className={styles.checkboxInput}
 											onChange={handleCheckAllChange}
 										/>
 									</th>
@@ -114,6 +127,7 @@ console.log(assetCodes)
 									<tr key={index}>
 										<td>
 											<input
+												className={styles.checkboxInput}
 												type='checkbox'
 												checked={checkedItems.some(
 													(item) => item.assetCode === row.assetCode

@@ -40,12 +40,6 @@ const SampleComponent: React.FC<SampleComponentProps> = ({ sampleData }) => {
         {showDiagram ? 'Hide Diagram' : 'Show Diagram'}
       </button>
       {showDiagram && <CheckListTable data={sampleData} />}
-      <div>
-        Checked Items:
-        {checkedItems.map((item) => (
-          <div key={item.assetCode}>{item.assetCode}</div>
-        ))}
-      </div>
     </div>
   );
 };

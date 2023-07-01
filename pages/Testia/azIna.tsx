@@ -1,18 +1,23 @@
 import Modal from '../../Components/Modal'
+import React, { useState } from 'react';
 
 
-const index = () => {
-  
+const ParentComponent: React.FC = () => {
+  const [selectedItem, setSelectedItem] = useState('');
+
+  const handleStatusSelect = (selectedStatus: string) => {
+    setSelectedItem(selectedStatus);
+  };
+
   return (
-    <>
-    <Modal/>
-    </>
-)
+    <div>
+      <Modal onSelectStatus={handleStatusSelect} />
+      {selectedItem && <p>Selected Item: {selectedItem}</p>}
+    </div>
+  );
+};
 
-}
-
-export default index
-
+export default ParentComponent;
 
 
 

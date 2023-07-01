@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 
 interface CheckedItem {
-  serial: string;
+  assetCode: string;
   // Add other properties here
 }
 

@@ -5,7 +5,7 @@ import { ContextProvider as DiagramContextProvider } from '../../Contexts/Diagra
 import { CheckedItemsProvider } from '../../Contexts/CheckedItemsContext';
 import CheckList from './CheckListTable/TableProvider';
  interface DataItem {
-  serial: string;
+  assetCode: string;
   // Add other properties here
 }
 
@@ -17,7 +17,6 @@ const App: React.FC<SampleComponentProps> = ({ sampleData }) => {
   return (
     <DiagramContextProvider>
       <CheckedItemsProvider>
-        <h1>helllo</h1>
         <CheckList sampleData = { sampleData} />
       </CheckedItemsProvider>
     </DiagramContextProvider>

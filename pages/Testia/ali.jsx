@@ -1,25 +1,19 @@
 import { useState, useEffect } from 'react';
 
-const MyPage = (props) => {
-  const [data, setData] = useState([
-    { assetCode: 'AST2022305935', status: 'Contractor---Intact' },
-    { assetCode: 'AST2023333530', status: 'Contractor---Intact' },
-    // Add more objects to the data array as needed
-  ]);
-
+const MyPage = ({ data }) => { 
   const [responses, setResponses] = useState([]);
 
   const fetchData = async () => {
     try {
       const updatedResponses = [];
 
-      for (const item of data) {
-        const response = await fetch('/api/Post/updateInstall', {
+      for (const item of data.assetcodes) {
+        const response = await fetch('/api/Post/updateStatus', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(item),
+          body: JSON.stringify({ assetCode: item, status: data.status }),
         });
 
         if (!response.ok) {
@@ -38,13 +32,13 @@ const MyPage = (props) => {
 
   return (
     <div>
-      {data.map((item, index) => (
+      {data.assetcodes.map((assetCode, index) => (
         <div key={index}>
-          <span>Asset Code: {item.assetCode}</span>
-          <span>Status: {item.status}</span>
+          <span>Asset Code: {assetCode}</span>
+          <span>Status: {data.status}</span>
         </div>
       ))}
-      <button onClick={fetchData}>fetch metch</button>
+      <button onClick={fetchData}>Fetch Data</button>
 
       <div>
         <h2>Responses:</h2>

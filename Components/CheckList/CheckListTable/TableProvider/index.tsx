@@ -4,7 +4,7 @@ import { ShowDiagramContext } from '../../../../Contexts/DiagramContext';
 import { CheckedItemsContext } from '../../../../Contexts/CheckedItemsContext';
 import LocalStorageButton from '../../LocalStorageButton';
 interface DataItem {
-  serial: string;
+  assetCode: string;
   // Add other properties here
 }
 
@@ -35,7 +35,7 @@ const SampleComponent: React.FC<SampleComponentProps> = ({ sampleData }) => {
 
   return (
 	  <div>
-		  <LocalStorageButton/>
+		  {/* <LocalStorageButton/> */}
       <button onClick={handleShowDiagramClick}>
         {showDiagram ? 'Hide Diagram' : 'Show Diagram'}
       </button>
@@ -43,7 +43,7 @@ const SampleComponent: React.FC<SampleComponentProps> = ({ sampleData }) => {
       <div>
         Checked Items:
         {checkedItems.map((item) => (
-          <div key={item.serial}>{item.serial}</div>
+          <div key={item.assetCode}>{item.assetCode}</div>
         ))}
       </div>
     </div>

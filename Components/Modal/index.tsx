@@ -30,7 +30,7 @@ const Modal: React.FC = () => {
     closeModal();
   };
 
-  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedStatus(event.target.value);
     setError('');
   };
@@ -42,26 +42,34 @@ const Modal: React.FC = () => {
       {isModalOpen && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <h2>Question</h2>
-            <p>which status want to update ?</p>
-            <div className={styles.selectContainer}>
-              <select
-                value={selectedStatus}
-                onChange={handleStatusChange}
-                className={styles.select}
-              >
-                <option color='red' value=""></option>
-                <option value="status1">Status 1</option>
-                <option value="status2">Status 2</option>
-              </select>
+            <h2>please select status</h2>
+            <div className={styles.radioContainer}>
+              <label className={styles.radioButton}>
+                <input
+                  type="radio"
+                  value="status1"
+                  checked={selectedStatus === "status1"}
+                  onChange={handleStatusChange}
+                />
+                <span className={styles.radioLabel}>Mobinnet---Intact_New</span>
+              </label>
+              <label className={styles.radioButton}>
+                <input
+                  type="radio"
+                  value="status2"
+                  checked={selectedStatus === "status2"}
+                  onChange={handleStatusChange}
+                />
+                <span className={styles.radioLabel}>Mobinnet---Intact_Second-hand</span>
+              </label>
               {error && <p className={styles.error}>{error}</p>}
             </div>
             <div className={styles.modalActions}>
               <button className={styles.acceptButton} onClick={handleAccept}>
-                Accept
+                Update
               </button>
               <button className={styles.rejectButton} onClick={handleReject}>
-                Reject
+                Cancel
               </button>
             </div>
           </div>

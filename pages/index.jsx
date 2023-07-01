@@ -51,7 +51,7 @@ const ExcelReader = () => {
 			.attr('cy', progress === 0 || progress === 100 ? height / 3 : height / 2)
 			.attr('r', circleRadius)
 			.attr('fill', 'none')
-			.attr('stroke', 'yellow')
+			.attr('stroke', progress === 100 ? '#f0f0f0' : 'yellow')
 			.attr('stroke-width', 2)
 
 		const hexagonContainer = svg.append('g')
@@ -241,22 +241,22 @@ const ExcelReader = () => {
 					accept='.xlsx, .xls'
 					ref={fileInputRef}
 					onChange={handleFileChange}
-					/>
-						<div className='buttons-box'>
+				/>
+				<div className='buttons-box'>
 					{progress === 100 && newRows.length > 0 && (
 						<GenerateExcel
 							rows={newRows}
 							cells={excelHeader}
 						/>
 					)}
+					{filteredExistData.length > 0 && (
+						<CheckList sampleData={filteredExistData} />
+					)}
 				</div>
 				<Table
 					existData={filteredExistData}
 					contradictionData={Contradiction}
 				/>
-				{filteredExistData.length > 0 && (
-					<CheckList sampleData={filteredExistData} />
-				)}
 			</div>
 		</>
 	)

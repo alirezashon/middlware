@@ -56,7 +56,6 @@
 
 
 
-
 interface UpdateAssetProps {
   data: {
     assetcodes: string[];
@@ -67,7 +66,7 @@ interface UpdateAssetProps {
 const UpdateAsset = async (
   data: UpdateAssetProps['data'],
   onProgress: (progress: number) => void
-): Promise<{ completed: any[]; failure: any[] }> => {
+): Promise<{ completed: string; failure: string }> => {
   try {
     const completed: any[] = [];
     const failure: any[] = [];
@@ -102,7 +101,6 @@ const UpdateAsset = async (
         if (!anotherResponse.ok) {
           throw new Error('Request failed');
         }
-
         const anotherResponseData = await anotherResponse.json();
         completed.push({ assetCode: item, APIResolve: 'update status' });
       } else {
@@ -114,14 +112,15 @@ const UpdateAsset = async (
       onProgress(progressPercentage);
     }
 
-    return { completed, failure };
+    return { completed: JSON.stringify(completed), failure: JSON.stringify(failure) };
   } catch (error) {
     console.error(error);
-    return { completed: [], failure: [] };
+    return { completed: '[]', failure: '[]' };
   }
 };
 
 export default UpdateAsset;
+
 
 
 // interface UpdateAssetProps {

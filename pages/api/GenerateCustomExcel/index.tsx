@@ -25,23 +25,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     headerRow.font = headerFont;
 
     // Add data rows
-    rows.forEach((row: string[], index: number) => {
-      const dataRow = worksheet.addRow(row);
-      dataRow.eachCell((cell, colNumber) => {
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: cellBgColor || 'FFFFFF00' }, // Yellow color by default if cellBgColor is not provided
-        };
-        const cellFont = {
-          bold: false,
-          name: font?.name || 'soheezy',
-          size: font?.size || 12,
-          color: { argb: cellFontColor || '000000FF' }, // Black color by default if cellFontColor is not provided
-        };
-        cell.font = cellFont;
-      });
-    });
+rows.forEach((row: string[], index: number) => {
+  const dataRow = worksheet.addRow(row);
+  dataRow.eachCell((cell, colNumber) => {
+    const bgColor = index % 2 === 0 ? cellBgColor  : 'ffd2fcf9'; // Set odd cells to white color and other cells to the specified cellBgColor
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: bgColor },
+    };
+    const fontColor = index % 2 === 0 ? cellFontColor  : 'ff05254f';
+    const cellFont = {
+      bold: false,
+      name: font?.name || 'Arial',
+      size: font?.size || 12,
+      color: { argb:  fontColor }, // Black color by default if cellFontColor is not provided
+    };
+    cell.font = cellFont;
+  });
+});
+
 
     // Set column widths
     if (columnWidths && Array.isArray(columnWidths)) {

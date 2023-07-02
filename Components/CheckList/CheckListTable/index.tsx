@@ -17,7 +17,7 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 	const { showDiagram, setShowDiagram } = useContext(ShowDiagramContext)
 	const [assetCodes, setAssetCodes] = useState<string[]>([]) // New state for asset codes
 	const [selectedItem, setSelectedItem] = useState('')
-	const [updated, setUpdated] = useState<DataItem[]>([])
+	const [updated, setUpdated] = useState<string[]>([])
 	const [progress, setProgress] = useState(0)
 	//config the setselected , for choose option of status from the modal
 	const handleStatusSelected = (selectedStatus: string) => {
@@ -70,40 +70,40 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 		}
 	}
 
-	const handleUpdateSubmit = async () => {
-		// Perform your update logic here using the checkedItems state
-		const sampleData = {
-			assetcodes: assetCodes, // Pass the assetCodes state to the API
-			status: selectedItem,
-		}
-		try {
-			const responses = await UpdateAsset(sampleData, handleProgress) // Pass handleProgress as the callback
-			console.log(responses)
-			const { completed, failure } = responses
-
-			// Use the completed and failure data as needed
-			console.log('Completed:', completed)
-			console.log('Failure:', failure)
-			const success: DataItem[] = data.map((item) => ({
-				...item,
-				successful: completed.some(
-					(completedItem) => completedItem.assetcode === item.assetCode
-				),
-			}))
-
-			setUpdated(success)
-			console.log('success:', success)
-		} catch (error) {
-			console.error(error)
-		}
+	
+const handleUpdateSubmit = async () => {
+	// Perform your update logic here using the checkedItems state
+	const sampleData = {
+		assetcodes: assetCodes, // Pass the assetCodes state to the API
+		status: selectedItem,
 	}
-
-	const handleProgress = (progress: number) => {
-		setProgress(progress)
+	try {
+		const responses = await UpdateAsset(sampleData, handleProgress) // Pass handleProgress as the callback
+		console.log(responses)
+		const { completed, failure } = responses
+		// Use the completed and failure data as needed
+		console.log('Completed:', completed)
+		console.log('Failure:', failure)
+		const completedArray = JSON.parse(completed)
+		setUpdated(
+			completedArray.map((item: { assetCode: string }) => item.assetCode)
+		)
+	} catch (error) {
+		console.error(error)
 	}
+}
 
-	useEffect(() => {}, [updated])
+const handleProgress = (progress: number) => {
+	setProgress(progress)
+}
 
+useEffect(() => {
+	handleUpdateSubmit()
+}, [])
+
+console.log('updated:', updated)
+
+	
 	// Rest of the component code
 	// AST2023340596,AST2023340597,AST2023340598,AST2023340599,AST2023340600,AST2023340601,AST2023340602,AST2023340603,AST2023340604,AST2023340605,AST2023340606
 	return (
@@ -150,35 +150,44 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 										Object.keys(data[0]).map((key) => <th key={key}>{key}</th>)}
 								</tr>
 							</thead>
-
 							<tbody>
-								{updated.length > 0
-									? updated.map((row, index) => (
-											<tr key={index}>
-												<td>
-													<input
-														className={styles.checkboxInput}
-														type='checkbox'
-														checked={checkedItems.some(
-															(item) => item.assetCode === row.assetCode
-														)}
-														onChange={() => handleCheckboxChange(row.assetCode)}
-													/>
+								{data.map((row, index) => {
+									const isCompleted = updated.some(
+										(completedItem: string) => completedItem === row.assetCode
+									)
+
+									const rowClassName = isCompleted ? styles.completedRow : ''
+
+									return (
+										<tr
+											key={index}
+											className={rowClassName}>
+											<td>
+												<input
+													className={styles.checkboxInput}
+													type='checkbox'
+													checked={checkedItems.some(
+														(item) => item.assetCode === row.assetCode
+													)}
+													onChange={() => handleCheckboxChange(row.assetCode)}
+												/>
+											</td>
+											{Object.entries(row).map(([key, value], index) => (
+												<td
+													key={index}
+													style={
+														isCompleted ? { backgroundColor: 'yellow' } : {}
+													}>
+													{value}
 												</td>
-												{Object.entries(row).map(([key, value], index) => (
-													<td
-														key={index}
-														style={
-															key === 'assetCode'
-																? { backgroundColor: '#c4de18' }
-																: undefined
-														}>
-														{value}
-													</td>
-												))}
-											</tr>
-									  ))
-									: data.map((row, index) => (
+											))}
+										</tr>
+									)
+								})}
+							</tbody>
+
+							{/* <tbody>
+								{ data.map((row, index) => (
 											<tr key={index}>
 												<td>
 													<input
@@ -195,7 +204,7 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 												))}
 											</tr>
 									  ))}
-							</tbody>
+							</tbody> */}
 						</table>
 					</div>
 				</div>

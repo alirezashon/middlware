@@ -13,8 +13,8 @@ const GenerateExcel: React.FC<GenerateExcelProps> = ({ rows, cells }) => {
       header: cells,
       rows: rows,
       font: { name: 'Arial', size: 12 },
-      headerBgColor: 'ff499b01',
-      cellBgColor: 'ffa5cd39',
+      headerBgColor: 'ff05254f',
+      cellBgColor: 'ff22b8d6',
       headerFontColor: 'ffffffff',
       cellFontColor: 'ffffffff',
       columnWidths: [

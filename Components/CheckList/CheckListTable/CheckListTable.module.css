@@ -1,136 +1,166 @@
-/* Modal.module.css */
+/**
+ * Modal.module.css
+ *
+ * @format
+ */
 
 .contradictionTable {
-    background-color: #e1e3a1;
-    width: 100%;
+	background-color: #e1e3a1;
+	width: 100%;
 }
 
 .contradictionTable th,
 .contradictionTable td {
-    border: 1px solid #443939;
-    text-align: center;
-    padding: 10px;
+	border: 1px solid #443939;
+	text-align: center;
+	padding: 10px;
 }
 
 .contradictionTable th {
-    color: white;
-    border-color: #8db609;
-    background-color: #3a3c2d;
-    font-weight: bold;
-    text-align: center;
+	color: white;
+	border-color: #8db609;
+	background-color: #3a3c2d;
+	font-weight: bold;
+	text-align: center;
 }
 
 .contradictionTable tbody tr:hover {
-    background-color: #f2f2f2;
-    cursor: pointer;
+	background-color: #f2f2f2;
+	cursor: pointer;
 }
 
 .contradictionTable tbody tr:active {
-    background-color: #e6e6e6;
+	background-color: #e6e6e6;
 }
 
 .contradictionTable thead {
-    background-color: #e3e3e3;
+	background-color: #e3e3e3;
 }
 
 .contradictionTable tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+	background-color: #f9f9f9;
 }
 
 .diagramBox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    box-shadow:1px 7px 7px 7px #e0fea4 inset;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
+	box-shadow: 1px 7px 7px 7px #e0fea4 inset;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
 }
 
 .scrollableContainer {
-    height: 96vh;
-    width: 96%;
-    margin-left: 1%;
-    background-color: #ecf1a1;
-    border: ridge 17px #fae4c1;
-    border-radius:1vh;
-    overflow-y: auto;
+	height: 96vh;
+	width: 96%;
+	margin-left: 1%;
+	background-color: #ecf1a1;
+	border: ridge 17px #fae4c1;
+	border-radius: 1vh;
+	overflow-y: auto;
 }
-.closeButton{
-    background-color : #fefdf3;
-        color: #fff;
-            margin: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+.closeButton {
+	background-color: #fefdf3;
+	color: #fff;
+	margin: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 .diagramBox button {
-    color: #fff;
-    margin: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+	color: #fff;
+	margin: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 .diagramBox button:hover {
-    background-color: #e26f31;
+	background-color: #e26f31;
 }
 
 .buttonsBox {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 .updateButton {
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    transition: color 0.3s ease;
+	top: 10px;
+	right: 10px;
+	background-color: transparent;
+	border: none;
+	color: #fff;
+	font-size: 20px;
+	cursor: pointer;
+	transition: color 0.3s ease;
 }
 
 .checkboxInput {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 16px;
-    height: 16px;
-    border: 1px solid #ffa20d;
-    outline: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 50%;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	width: 16px;
+	height: 16px;
+	border: 1px solid #ffa20d;
+	outline: none;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	border-radius: 50%;
 }
 
 .checkboxInput:checked {
-    background-color: #a5cd39;
-    border: 1px solid #499b01;
+	background-color: #a5cd39;
+	border: 1px solid #499b01;
 }
 
 .checkboxInput:not(:checked) {
-    position: relative;
+	position: relative;
 }
 
 .checkboxInput:not(:checked):before,
 .checkboxInput:not(:checked):after {
-    content: "";
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px;
-    height: 2px;
-    background-color: #cb0707;
-    transition: transform 0.3s ease;
+	content: '';
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 8px;
+	height: 2px;
+	background-color: #cb0707;
+	transition: transform 0.3s ease;
 }
 
 .checkboxInput:not(:checked):before {
-    transform: translate(-50%, -50%) rotate(45deg);
+	transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .checkboxInput:not(:checked):after {
-    transform: translate(-50%, -50%) rotate(-45deg);
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.progressBar {
+	width: 50%;
+	height: 2vh;
+    margin-top: 2vh;
+	background-color: #f0f0f0;
+	border-radius: 10px;
+    border: ridge 3px #45e830;
+}
+
+.progressFill {
+	height: 100%;
+	border-radius: 22vh;
+	background-image: radial-gradient(
+		circle at 50% 50%,
+		#c8ee82 46.67%,
+		#c5eb9d 20.33%,
+		#d6f48c 50%,
+		#ddf66a 26.67%,
+		#c5e98a 83.33%,
+		#c5e672 10%,
+		#bde878
+	);
+    box-shadow: 1px 1px 4px 1px #a1a19f,1px 1px 4px 1px #f1f14a inset;
+	transition: width 0.3s ease-in-out;
 }

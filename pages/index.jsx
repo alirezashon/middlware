@@ -229,12 +229,14 @@ const ExcelReader = () => {
 								? 'rgba(0,0,0,0)'
 								: 'rgba(40,40,40,0.9)',
 						width: progress === 0 ? '100%' : '20%',
-						height: progress === 0 ? '177vh' : '40vh',
+						height: progress === 0 ? '100vh' : '40vh',
 						marginLeft: progress === 0 ? '0' : '40%',
+						paddingTop: progress === 0 ? '9%' : '0',
 						borderRadius: progress === 0 ? '0' : '100%',
+	
 					}}
 					ref={svgRef}></svg>
-				{progress > 0 && progress < 100 && <div class='background_gif'> </div>}
+				{progress > 0 && progress < 101 && <div class='background_gif'> </div>}
 				<input
 					type='file'
 					style={{ display: 'none' }}

@@ -9,6 +9,7 @@ import styles from './CheckListTable.module.css'
 import { MdBackspace } from 'react-icons/md'
 interface DataItem {
 	assetCode: string
+	[key: string]: any
 	// Add other properties here
 }
 
@@ -19,9 +20,14 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 	const [selectedItem, setSelectedItem] = useState('')
 	const [updated, setUpdated] = useState<string[]>([])
 	const [progress, setProgress] = useState(0)
+	const [columns, setColumns] = useState([''])
 	//config the setselected , for choose option of status from the modal
+
+	
+console.log( columns)
 	const handleStatusSelected = (selectedStatus: string) => {
 		setSelectedItem(selectedStatus)
+		
 	}
 
 	useEffect(() => {
@@ -70,40 +76,43 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 		}
 	}
 
-	
-const handleUpdateSubmit = async () => {
-	// Perform your update logic here using the checkedItems state
-	const sampleData = {
-		assetcodes: assetCodes, // Pass the assetCodes state to the API
-		status: selectedItem,
+	const handleUpdateSubmit = async () => {
+		// Perform your update logic here using the checkedItems state
+		const sampleData = {
+			assetcodes: assetCodes, // Pass the assetCodes state to the API
+			status: selectedItem,
+		}
+		try {
+			const responses = await UpdateAsset(sampleData, handleProgress) // Pass handleProgress as the callback
+			console.log(responses)
+			const { completed, failure } = responses
+			// Use the completed and failure data as needed
+			console.log('Completed:', completed)
+			console.log('Failure:', failure)
+			const completedArray = JSON.parse(completed)
+			setUpdated(
+				completedArray.map((item: { assetCode: string }) => item.assetCode)
+			)
+		} catch (error) {
+			console.error(error)
+		}
 	}
-	try {
-		const responses = await UpdateAsset(sampleData, handleProgress) // Pass handleProgress as the callback
-		console.log(responses)
-		const { completed, failure } = responses
-		// Use the completed and failure data as needed
-		console.log('Completed:', completed)
-		console.log('Failure:', failure)
-		const completedArray = JSON.parse(completed)
-		setUpdated(
-			completedArray.map((item: { assetCode: string }) => item.assetCode)
-		)
-	} catch (error) {
-		console.error(error)
+
+	const handleProgress = (progress: number) => {
+		setProgress(progress)
 	}
+
+	useEffect(() => {
+		handleUpdateSubmit()
+	}, [])
+
+	console.log('updated:', updated)
+
+const handleHeaderClick = (key: string) => {
+	const columnValues = data.map((row) => row[key])
+	setColumns([...columnValues])
+	navigator.clipboard.writeText(columnValues.join(','))
 }
-
-const handleProgress = (progress: number) => {
-	setProgress(progress)
-}
-
-useEffect(() => {
-	handleUpdateSubmit()
-}, [])
-
-console.log('updated:', updated)
-
-	
 	// Rest of the component code
 	// AST2023340596,AST2023340597,AST2023340598,AST2023340599,AST2023340600,AST2023340601,AST2023340602,AST2023340603,AST2023340604,AST2023340605,AST2023340606
 	return (
@@ -147,7 +156,13 @@ console.log('updated:', updated)
 										/>
 									</th>
 									{data.length > 0 &&
-										Object.keys(data[0]).map((key) => <th key={key}>{key}</th>)}
+										Object.keys(data[0]).map((key) => (
+											<th key={key}>
+												<button onClick={() => handleHeaderClick(key)}>
+													{key}
+												</button>
+											</th>
+										))}
 								</tr>
 							</thead>
 							<tbody>
@@ -185,26 +200,6 @@ console.log('updated:', updated)
 									)
 								})}
 							</tbody>
-
-							{/* <tbody>
-								{ data.map((row, index) => (
-											<tr key={index}>
-												<td>
-													<input
-														className={styles.checkboxInput}
-														type='checkbox'
-														checked={checkedItems.some(
-															(item) => item.assetCode === row.assetCode
-														)}
-														onChange={() => handleCheckboxChange(row.assetCode)}
-													/>
-												</td>
-												{Object.entries(row).map(([key, value], index) => (
-													<td key={index}>{value}</td>
-												))}
-											</tr>
-									  ))}
-							</tbody> */}
 						</table>
 					</div>
 				</div>

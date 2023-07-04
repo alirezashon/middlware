@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import CheckListTable from '../../../../Components/CheckList/CheckListTable';
 import { ShowDiagramContext } from '../../../../Contexts/DiagramContext';
 import { CheckedItemsContext } from '../../../../Contexts/CheckedItemsContext';
-import LocalStorageButton from '../../LocalStorageButton';
+
 interface DataItem {
   assetCode: string;
   // Add other properties here
@@ -35,7 +35,6 @@ const SampleComponent: React.FC<SampleComponentProps> = ({ sampleData }) => {
 
   return (
 	  <div>
-		  {/* <LocalStorageButton/> */}
       <button onClick={handleShowDiagramClick}>
         {showDiagram ? 'Hide Diagram' : 'Show Diagram'}
       </button>

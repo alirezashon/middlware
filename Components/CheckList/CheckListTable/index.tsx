@@ -20,14 +20,12 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 	const [selectedItem, setSelectedItem] = useState('')
 	const [updated, setUpdated] = useState<string[]>([])
 	const [progress, setProgress] = useState(0)
-	const [columns, setColumns] = useState([''])
+
 	//config the setselected , for choose option of status from the modal
 
-	
-console.log( columns)
+	console.log(updated + ' updated')
 	const handleStatusSelected = (selectedStatus: string) => {
 		setSelectedItem(selectedStatus)
-		
 	}
 
 	useEffect(() => {
@@ -108,13 +106,19 @@ console.log( columns)
 
 	console.log('updated:', updated)
 
-const handleHeaderClick = (key: string) => {
-	const columnValues = data.map((row) => row[key])
-	setColumns([...columnValues])
-	navigator.clipboard.writeText(columnValues.join(','))
-}
-	// Rest of the component code
-	// AST2023340596,AST2023340597,AST2023340598,AST2023340599,AST2023340600,AST2023340601,AST2023340602,AST2023340603,AST2023340604,AST2023340605,AST2023340606
+	const handleHeaderClick = (key: string) => {
+		const checkedRows = data.filter((row) =>
+			checkedItems.some((item) => item.assetCode === row.assetCode)
+		)
+		let columnValues: string[]
+		if (key === 'assetCode') {
+			columnValues = checkedRows.map((row) => row.assetCode)
+		} else {
+			columnValues = checkedRows.map((row) => row[key])
+		}
+		navigator.clipboard.writeText(columnValues.join(','))
+	}
+
 	return (
 		<div>
 			{showDiagram && (
@@ -127,13 +131,24 @@ const handleHeaderClick = (key: string) => {
 								onClick={handleCloseClick}>
 								<MdBackspace />
 							</button>
-							{progress > 0 && (
-								<div className={styles.progressBar}>
-									<div
-										className={styles.progressFill}
-										style={{ width: `${progress}%` }}></div>
-								</div>
+							{progress >= 0 && progress <= 100 && (
+								<>
+									<div className={styles.progressBar}>
+										<div
+											className={styles.progressFill}
+											style={{ width: `${progress}%` }}></div>
+									</div>
+								</>
 							)}
+							{progress > 0 && progress < 100 && (
+								<div className={styles.hackeri}>
+									{data
+										.slice(0, Math.floor((progress / 100) * data.length))
+										.map((item, index) => (
+											<p key={index}>{JSON.stringify(item)}</p>
+										))}
+								</div>
+							)}{' '}
 							{selectedItem.length > 0 ? (
 								<button
 									style={{ backgroundColor: '#99de18' }}

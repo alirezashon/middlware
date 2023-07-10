@@ -164,3 +164,16 @@
     box-shadow: 1px 1px 4px 1px #a1a19f,1px 1px 4px 1px #f1f14a inset;
 	transition: width 0.3s ease-in-out;
 }
+
+.hackeri{
+	padding-top: 4vh;
+	background-color: rgba(0, 0, 0, 0.7);
+	position: absolute;
+	height: 100vh;
+	width: 96%;
+	z-index: 1;
+	margin-right: 4vh;
+	font-size: 2.2vh;
+	line-height: 4vh;
+	color: #d0d897;
+}

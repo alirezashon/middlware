@@ -7,16 +7,16 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
-const loginURL = 'http://asset.mobinnet.net/Account/LDAPLogin'
-const targetURL = 'http://asset.mobinnet.net/'
+const loginURL = 'http://Login'
+const targetURL = 'http://'
 
 const main = async () => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
 	const page = await browser.newPage()
 	await page.goto(loginURL)
 
-	await page.type('#UserName', 'al.akbari')
-	await page.type('#Password', 'Argon&22')
+	await page.type('#UserName', '')
+	await page.type('#Password', '')
 	await page.click('[type="submit"]')
 
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })

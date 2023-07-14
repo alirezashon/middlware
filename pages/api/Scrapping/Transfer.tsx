@@ -6,8 +6,8 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
-const loginURL = 'http://10.104.26.112/Account/LDAPLogin'
-const targetURL = 'http://10.104.26.112/'
+const loginURL = 'http:/'
+const targetURL = 'http:/'
 
 const main = async () => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
@@ -82,38 +82,7 @@ await page.evaluate(() => {
 })
 
 	
-	// await page.evaluate(() => {
-	// 	const selectElement = document.getElementById(
-	// 		'FormAssetTransferFormView_Employee'
-	// 	)!
-
-	// 	// Create a new option element
-	// 	const newOption = document.createElement('option')
-	// 	newOption.value = '3107'
-	// 	newOption.setAttribute('data-select2-id', '47')
-	// 	newOption.textContent = 'Contractor (Contractor@test.ir)'
-
-	// 	// Add the new option element to the select box
-	// 	selectElement.appendChild(newOption)
-	// })
-
-	// await page.type(
-	// 	'#select2-FormAssetTransferFormView_Employee-container',
-	// 	'Contractor (Contractor@test.ir)'
-	// )
-	// await page.click('span[role="presentation"]')
-	// await page.click('div[data-select2-id="10"]')
-	// await page.select(
-	// 	'#FormAssetTransferFormView_Employee',
-	// 	'Contractor (Contractor@test.ir)'
-	// )
-
-    // await page.click('.select2-selection select2-selection--single')
-	// await page.type('.select2-search__field', 'Contractor (Contractor@test.ir)')
-	// await page.keyboard.press('Enter')
-
-	// await page.screenshot()
-}
+	}
 
 const waitForTimeout = async (milliseconds: number): Promise<void> => {
 	await new Promise((resolve) => setTimeout(resolve, milliseconds))

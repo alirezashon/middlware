@@ -14,8 +14,8 @@ const main = async () => {
 	const page = await browser.newPage()
 	await page.goto(loginURL)
 
-	await page.type('#UserName', 'al.akbari')
-	await page.type('#Password', 'Argon&22')
+	await page.type('#UserName', '')
+	await page.type('#Password', '')
 	await page.click('[type="submit"]')
 
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })

@@ -18,6 +18,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/index.jsx", "pages/Testia/AZ.tsx", "Components/Hexagon/index.jsx", "pages/Testia/azIna.tsx", "pages/api/Boom.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/index.jsx", "pages/Testia/AZ.tsx", "Components/Hexagon/index.jsx", "pages/Testia/azIna.tsx", "pages/api/Scrapping/Add.tsx"],
   "exclude": ["node_modules"]
 }

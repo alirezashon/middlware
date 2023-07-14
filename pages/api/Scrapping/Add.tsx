@@ -1,4 +1,3 @@
-/** @format */
 
 // import { NextApiRequest, NextApiResponse } from 'next'
 // import puppeteer from 'puppeteer-extra'

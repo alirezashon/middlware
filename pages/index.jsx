@@ -7,6 +7,7 @@ import { createHexagonImage } from '../Components/createHexagonImage'
 import CheckList from '../Components/CheckList'
 import Table from '../Components/Table'
 import GenerateExcel from '../Components/GenerateExcel'
+
 const ExcelReader = () => {
 	const fileInputRef = useRef(null)
 	const svgRef = useRef(null)
@@ -16,7 +17,16 @@ const ExcelReader = () => {
 	const [hexagonColor, setHexagonColor] = useState('gold')
 	const [excelHeader, setExcelHeader] = useState([])
 	const [progress, setProgress] = useState(0)
+	const [isDialogVisible, setIsDialogVisible] = useState(false)
 
+	const handleButtonClick = () => {
+		setIsDialogVisible(true)
+	}
+
+	const handleDialogClose = () => {
+		setIsDialogVisible(false)
+	}
+	//////////////////////////Top codes are about generate buttons dialog//////////////////////////////////////////////
 	useEffect(() => {
 		const svg = d3.select(svgRef.current)
 		const { width, height } = svg.node().getBoundingClientRect()
@@ -39,7 +49,10 @@ const ExcelReader = () => {
 		const Maincircle = svg
 			.append('circle')
 			.attr('cx', width / 2)
-			.attr('cy', progress === 0 || progress === 100 ? height / 3 : height / 2)
+			.attr(
+				'cy',
+				progress === 0 || progress === 100 ? height / 2.5 : height / 2
+			)
 			.attr('r', circleRadius)
 			.attr('fill', 'none')
 			.attr('stroke', '#f0f0f0')
@@ -48,7 +61,10 @@ const ExcelReader = () => {
 		const circle = svg
 			.append('circle')
 			.attr('cx', width / 2)
-			.attr('cy', progress === 0 || progress === 100 ? height / 3 : height / 2)
+			.attr(
+				'cy',
+				progress === 0 || progress === 100 ? height / 2.5 : height / 2
+			)
 			.attr('r', circleRadius)
 			.attr('fill', 'none')
 			.attr('stroke', progress === 100 ? '#f0f0f0' : 'yellow')
@@ -64,7 +80,7 @@ const ExcelReader = () => {
 			.attr('x', width / 2 - 59)
 			.attr(
 				'y',
-				progress === 0 || progress === 100 ? height / 3 - 59 : height / 2 - 59
+				progress === 0 || progress === 100 ? height / 2.5 - 59 : height / 2 - 59
 			)
 			.attr('cursor', 'grab')
 			.call(
@@ -105,7 +121,9 @@ const ExcelReader = () => {
 			await workbook.xlsx.load(file)
 
 			const worksheet = workbook.getWorksheet(1)
+
 			const jsonData = []
+			const sentPy = []
 			const Serials = worksheet
 				.getColumn('G')
 				.values.map((cell) => (cell ? cell.toString() : ''))
@@ -118,10 +136,12 @@ const ExcelReader = () => {
 				} else {
 					// const filteredArray = rowData.filter((item) => item);
 					jsonData.push(rowData)
+					sentPy.push(rowData.slice(1))
 				}
+				setExcelData(jsonData)
+
+				setExcelData1(Serials.slice(1))
 			})
-			setExcelData(jsonData)
-			setExcelData1(Serials.slice(1))
 		} catch (error) {
 			console.error(error)
 		}
@@ -186,6 +206,7 @@ const ExcelReader = () => {
 						imsi: item.IMSI,
 						iccid: item.ICCID,
 					}))
+
 					return acc.concat(mappedArray)
 				} else {
 					return acc
@@ -193,21 +214,35 @@ const ExcelReader = () => {
 		  }, [])
 		: []
 
-	const Contradiction = existData.filter((obj) => {
+	const ContradictionCategory = existData.filter((obj) => {
 		const matchingArray = excelData.find((array) => array[7] == obj.serial)
 		return (
 			matchingArray && matchingArray[4].split('>').slice(-1)[0] !== obj.category
 		)
 	})
-	const filteredExistData = existData.filter(
-		(obj) => !Contradiction.some((item) => item.serial === obj.serial)
+	const ContradictionName = existData.filter((obj) => {
+		const matchingArray = excelData.find((array) => array[7] == obj.serial)
+		return matchingArray && matchingArray[2] !== obj.assetName
+	})
+
+	const removeAssetName = existData.filter(
+		(obj) => !ContradictionName.some((item) => item.serial === obj.serial)
+	)
+	const filteredExistData = removeAssetName.filter(
+		(obj) => !ContradictionCategory.some((item) => item.serial === obj.serial)
 	)
 	const newItems = excelData.filter((item) =>
 		item.every(
 			(value) => !existData.some((existData) => existData.serial === value)
 		)
 	)
+	const oldItems = excelData.filter((item) =>
+		item.some((value) =>
+			existData.some((existData) => existData.serial === value)
+		)
+	)
 	const newRows = newItems.map((array) => array.slice(1))
+	const oldRows = oldItems.map((array) => array.slice(1))
 
 	return (
 		<>
@@ -233,7 +268,6 @@ const ExcelReader = () => {
 						marginLeft: progress === 0 ? '0' : '40%',
 						paddingTop: progress === 0 ? '9%' : '0',
 						borderRadius: progress === 0 ? '0' : '100%',
-	
 					}}
 					ref={svgRef}></svg>
 				{progress > 0 && progress < 101 && <div class='background_gif'> </div>}
@@ -246,18 +280,53 @@ const ExcelReader = () => {
 				/>
 				<div className='buttons-box'>
 					{progress === 100 && newRows.length > 0 && (
-						<GenerateExcel
-							rows={newRows}
-							cells={excelHeader}
-						/>
+						<>
+							<button
+								className='dialog-btn'
+								onClick={() => handleButtonClick()}
+								onMouseEnter={() => handleButtonClick()}>
+								Generate excels
+							</button>
+
+							{isDialogVisible && (
+								<div className='dialog-overlay'>
+									<div className='dialog'>
+										<div className='generate-btns'>
+											<button
+												className='excel-btn'
+												onClick={() => handleButtonClick()}>
+												<GenerateExcel
+													rows={newRows}
+													cells={excelHeader}
+													btnName={'(New Data)'}
+												/>
+											</button>
+											<button
+												className='excel-btn'
+												onClick={() => handleButtonClick()}>
+												<GenerateExcel
+													rows={oldRows}
+													cells={excelHeader}
+													btnName={'(Old Data)'}
+												/>
+											</button>
+										</div>
+										<button
+											className='close-btn'
+											onClick={handleDialogClose}>
+											Close
+										</button>
+									</div>
+								</div>
+							)}
+						</>
 					)}
-					{filteredExistData.length > 0 && (
-						<CheckList sampleData={filteredExistData} />
-					)}
+					{existData.length > 0 && <CheckList sampleData={existData} />}
 				</div>
 				<Table
 					existData={filteredExistData}
-					contradictionData={Contradiction}
+					contradictionName={ContradictionName}
+					contradictionCategory={ContradictionCategory}
 				/>
 			</div>
 		</>

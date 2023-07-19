@@ -17,7 +17,7 @@ const App: React.FC<SampleComponentProps> = ({ sampleData }) => {
   return (
     <DiagramContextProvider>
       <CheckedItemsProvider>
-        <CheckList sampleData = { sampleData} />
+        <CheckList sampleData = { sampleData } />
       </CheckedItemsProvider>
     </DiagramContextProvider>
   );

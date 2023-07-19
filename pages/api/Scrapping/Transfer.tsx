@@ -6,23 +6,38 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
-const loginURL = 'http://10.104.26.112/Account/LDAPLogin'
-const targetURL = 'http://10.104.26.112/'
-
 const main = async () => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
 	const page = await browser.newPage()
-	await page.goto(loginURL)
+	await page.goto(`${process.env.ASSET_URL}`)
 
-	await page.type('#UserName', 'al.akbari')
-	await page.type('#Password', 'Argon&22')
-	await page.click('[type="submit"]')
+	await page.type('#UserName', `${process.env.ASSET_USER}`)
+	await page.type('#Password', `${process.env.ASSET_PASS}`)
+	await page.click('button[type="submit"]')
+	await page.waitForTimeout(1000)
 
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
-	await page.goto(targetURL)
+	// Extract the token from the response or cookies
+	const response = await page.waitForResponse((res) =>
+		res.url().includes('login_success')
+	) // Replace 'login_success' with the URL that indicates successful login
+	const token = await response.json() // Assuming the response is in JSON format and contains the token
+
+	// Use the extracted token to make authenticated requests
+	// For example, you can include the token in the URL of the new page you want to navigate to
+	const targetUrlWithToken = `${process.env.ASSET_TARGET}?token=${token}` // Replace 'token' with the name of the parameter used in the URL
+	await page.goto(targetUrlWithToken)
 
 	await page.waitForSelector('.AddPlus')
 	await page.click('.AddPlus')
+
+	await page.evaluate(() => {
+		history.pushState(
+			'',
+			document.title,
+			window.location.pathname + window.location.search
+		)
+	})
 
 	await page.waitForSelector('.FormAssetCustomFilterViewCustomSearch')
 	await page.type(
@@ -33,16 +48,16 @@ const main = async () => {
 
 	await page.waitForSelector('.AssetTrackerFileColumn')
 
-	await new Promise((resolve) => setTimeout(resolve, 6000))
+	await new Promise((resolve) => setTimeout(resolve, 8000))
 	await page.waitForSelector('.select-checkbox')
 	await page.click('.select-checkbox')
 
+	await page.waitForTimeout(3000)
+
 	await page.click('.btn-assettransfer')
 
-	// await page.click('.chosen-search')
-	// await page.type('.chosen-search input', 'Contractor---Intact')
 	await page.waitForTimeout(3000)
-	await page.waitForSelector('.chosen-single')
+	await page.waitForSelector('#FormAssetCheckTransferFormView_StatusId_chosen')
 	await page.click('#FormAssetCheckTransferFormView_StatusId_chosen')
 
 	await page.waitForSelector('.chosen-single span')
@@ -59,60 +74,27 @@ const main = async () => {
 	await page.keyboard.press('Enter')
 	await page.keyboard.press('Enter')
 
-	await page.waitForTimeout(3333)
-	
-	await page.click('#AllotedTo_transfer .select2-selection__rendered')
-await page.evaluate(() => {
-	const parentElements = document.querySelectorAll(
-		'#AllotedTo_transfer'
+	await page.click(
+		'span[aria-labelledby="select2-FormAssetTransferFormView_Employee-container"]'
 	)
+	await page.type(
+		'.select2-search--dropdown input[class="select2-search__field"]',
+		'Contractor (Contractor@test.ir)'
+	)
+	await page.waitForTimeout(2222)
 
-	parentElements.forEach((parentElement) => {
-		const selectElement = parentElement.querySelector(
-			'select[name="Employee"]'
-		) as HTMLSelectElement | null
+	await page.keyboard.press('Enter')
+	await page.waitForTimeout(3333)
+	await page.click(
+		'span[aria-labelledby="select2-FormAssetCheckTransferFormView_PartnerId-container"]'
+	)
+	await page.type(
+		'.select2-search--dropdown input[class="select2-search__field"]',
+		'پیشگامان سخت افزار تیراژه'
+	)
+	await page.waitForTimeout(2222)
 
-		if (selectElement) {
-			selectElement.value = '3107'
-			const event = new Event('change', { bubbles: true })
-			selectElement.dispatchEvent(event)
-		}
-		
-	})
-})
-
-	
-	// await page.evaluate(() => {
-	// 	const selectElement = document.getElementById(
-	// 		'FormAssetTransferFormView_Employee'
-	// 	)!
-
-	// 	// Create a new option element
-	// 	const newOption = document.createElement('option')
-	// 	newOption.value = '3107'
-	// 	newOption.setAttribute('data-select2-id', '47')
-	// 	newOption.textContent = 'Contractor (Contractor@test.ir)'
-
-	// 	// Add the new option element to the select box
-	// 	selectElement.appendChild(newOption)
-	// })
-
-	// await page.type(
-	// 	'#select2-FormAssetTransferFormView_Employee-container',
-	// 	'Contractor (Contractor@test.ir)'
-	// )
-	// await page.click('span[role="presentation"]')
-	// await page.click('div[data-select2-id="10"]')
-	// await page.select(
-	// 	'#FormAssetTransferFormView_Employee',
-	// 	'Contractor (Contractor@test.ir)'
-	// )
-
-    // await page.click('.select2-selection select2-selection--single')
-	// await page.type('.select2-search__field', 'Contractor (Contractor@test.ir)')
-	// await page.keyboard.press('Enter')
-
-	// await page.screenshot()
+	await page.keyboard.press('Enter')
 }
 
 const waitForTimeout = async (milliseconds: number): Promise<void> => {

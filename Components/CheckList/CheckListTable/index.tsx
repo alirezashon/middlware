@@ -23,7 +23,7 @@ const CheckListTable: React.FC<{ data: DataItem[] }> = ({ data }) => {
 
 	//config the setselected , for choose option of status from the modal
 
-	console.log(updated + ' updated')
+
 	const handleStatusSelected = (selectedStatus: string) => {
 		setSelectedItem(selectedStatus)
 	}

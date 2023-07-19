@@ -1,51 +1,5 @@
+/** @format */
 
-// import { NextApiRequest, NextApiResponse } from 'next'
-// import puppeteer from 'puppeteer-extra'
-// import StealthPlugin from 'puppeteer-extra-plugin-stealth'
-
-// puppeteer.use(StealthPlugin())
-
-// const loginURL = 'http://asset.mobinnet.net/Account/LDAPLogin'
-// const targetURL = 'http://asset.mobinnet.net/'
-
-// const main = async () => {
-//   const browser = await puppeteer.launch({ headless: true })
-//   const page = await browser.newPage()
-//   await page.goto(loginURL)
-
-//   await page.type('#UserName', 'al.akbari')
-//   await page.type('#Password', 'Argon&22')
-//   await page.click('[type="submit"]')
-
-//   await page.waitForNavigation({ waitUntil: 'networkidle0' })
-//   await page.goto(targetURL)
-
-//   await page.waitForSelector('.btn-asset')
-//   await page.click('.btn-asset')
-
-//   await page.click('#FormAssetFormViewbtnSave[type="submit"]')
-
-//   const spanTexts = await page.evaluate(() => {
-//     const spans = Array.from(document.querySelectorAll('label'))
-//     return spans.map(span => span.textContent)
-//   })
-
-//   await browser.close()
-
-//   return spanTexts
-// }
-
-// const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
-//   try {
-//     const spanTexts = await main()
-//     res.status(200).json({ message: 'Action performed successfully' , spanTexts})
-//   } catch (error) {
-//     console.error('Error performing action:', error)
-//     res.status(500).json({ error: 'Error performing action' })
-//   }
-// }
-
-// export default handler
 import { NextApiRequest, NextApiResponse } from 'next'
 import { ElementHandle } from 'puppeteer'
 import puppeteer from 'puppeteer-extra'
@@ -53,20 +7,17 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
-const loginURL = 'http://asset.mobinnet.net/Account/LDAPLogin'
-const targetURL = 'http://asset.mobinnet.net/'
-
 const main = async () => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
 	const page = await browser.newPage()
-	await page.goto(loginURL)
+	await page.goto(`${process.env.ASSET_URL}`)
 
-	await page.type('#UserName', 'al.akbari')
-	await page.type('#Password', 'Argon&22')
+	await page.type('#UserName', `${process.env.ASSET_USER}`)
+	await page.type('#Password', `${process.env.ASSET_PASS}`)
 	await page.click('[type="submit"]')
 
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
-	await page.goto(targetURL)
+	await page.goto(`${process.env.ASSET_TARGET}`)
 
 	await page.waitForSelector('.btn-asset')
 	await page.click('.btn-asset')
@@ -112,7 +63,6 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
 }
 
 export default handler
-
 
 // import { NextApiRequest, NextApiResponse } from 'next'
 // import { ElementHandle } from 'puppeteer'

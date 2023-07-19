@@ -1,5 +1,5 @@
-body{
-    overflow-x:hidden
+body {
+    overflow-x: hidden
 }
 
 button {
@@ -10,7 +10,6 @@ button {
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
-
 }
 
 button:hover {
@@ -22,7 +21,7 @@ button:active {
 }
 
 .contradiction-table {
-  background-color: #e1e3a1
+    background-color: #e1e3a1
 }
 
 
@@ -40,7 +39,7 @@ button:active {
 
 .contradiction-table th {
     color: white;
-    border-color :#8db609;
+    border-color: #8db609;
     background-color: #3a3c2d;
     font-weight: bold;
     text-align: center;
@@ -95,10 +94,11 @@ button:active {
 
 
 
-.buttons-box{
+.buttons-box {
     display: flex;
     justify-content: space-between;
 }
+
 .update-button {
     top: 10px;
     right: 10px;
@@ -127,16 +127,6 @@ button:active {
     transition: width 0.3s ease-in-out;
 }
 
-
-
-
-
-
-
-
-
-
-
 .background_gif {
     position: fixed;
     top: 0;
@@ -144,7 +134,7 @@ button:active {
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    background: #1d0101 url(https://cutewallpaper.org/21/matrix-background-gif/Free-Binary-Code-4K-Long-Loop-Screensaver-GIF.gif) center center/auto repeat;
+    background: #1d0101 url('/0-1-gif.gif') center center/auto repeat;
     background-repeat: no-repeat;
     background-size: cover;
     opacity: 0.8;
@@ -152,6 +142,71 @@ button:active {
 
 
 
+/* for dialog buttons in index file  */
+/* styles.css */
+
+.dialog-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.dialog {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.generate-btns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.excel-btn {
+    padding: 10px 20px;
+    background-color: #e3eec8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.excel-btn:hover {
+    background-color: #a9eed0;
+}
+
+.close-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background-color: #f56207;
+}
 
 ::-webkit-scrollbar {
     width: 7px;
@@ -160,8 +215,7 @@ button:active {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px #eaec5a;
-    background-color: #e7f8d0;
+    box-shadow: inset 0 0 5px grey;
     border-radius: 4px;
 }
 

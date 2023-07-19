@@ -106,22 +106,6 @@ const main = async () => {
 	)
 	await page.waitForTimeout(2222)
 
-<<<<<<< HEAD
-	await page.keyboard.press('Enter')
-}
-=======
-		if (selectElement) {
-			selectElement.value = '3107'
-			const event = new Event('change', { bubbles: true })
-			selectElement.dispatchEvent(event)
-		}
-		
-	})
-})
-
-	
-	}
->>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 
 const waitForTimeout = async (milliseconds: number): Promise<void> => {
 	await new Promise((resolve) => setTimeout(resolve, milliseconds))

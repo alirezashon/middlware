@@ -96,21 +96,20 @@ const main = async () => {
 	)
 	await page.waitForTimeout(2222)
 
+}
+	const waitForTimeout = async (milliseconds: number): Promise<void> => {
+		await new Promise((resolve) => setTimeout(resolve, milliseconds));
+	};
 
-const waitForTimeout = async (milliseconds: number): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
+	const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
+		try {
+			await main();
+			await waitForTimeout(5000); // Wait for 5 seconds before responding
 
-const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
-  try {
-    await main();
-    await waitForTimeout(5000); // Wait for 5 seconds before responding
-
-    res.status(200).json({ message: 'Action performed successfully' });
-  } catch (error) {
-    console.error('Error performing action:', error);
-    res.status(500).json({ error: 'Error performing action' });
-  }
-};
-
-export default handler
+			res.status(200).json({ message: 'Action performed successfully' });
+		} catch (error) {
+			console.error('Error performing action:', error);
+			res.status(500).json({ error: 'Error performing action' });
+		}
+	}
+	export default handler

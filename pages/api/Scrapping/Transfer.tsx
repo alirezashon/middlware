@@ -6,27 +6,17 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
-<<<<<<< HEAD
-=======
-const loginURL = 'http:/'
-const targetURL = 'http:/'
-
->>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 const main = async () => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
 	const page = await browser.newPage()
 	await page.goto(`${process.env.ASSET_URL}`)
 
-<<<<<<< HEAD
+
 	await page.type('#UserName', `${process.env.ASSET_USER}`)
 	await page.type('#Password', `${process.env.ASSET_PASS}`)
 	await page.click('button[type="submit"]')
 	await page.waitForTimeout(1000)
-=======
-	await page.type('#UserName', '')
-	await page.type('#Password', '')
-	await page.click('[type="submit"]')
->>>>>>> 6e32b5bbadfab291013f647385f310241871822e
+
 
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
 	// Extract the token from the response or cookies
@@ -108,19 +98,19 @@ const main = async () => {
 
 
 const waitForTimeout = async (milliseconds: number): Promise<void> => {
-	await new Promise((resolve) => setTimeout(resolve, milliseconds))
-}
+  await new Promise((resolve) => setTimeout(resolve, milliseconds));
+};
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
-	try {
-		await main()
-		await waitForTimeout(5000) // Wait for 5 seconds before responding
+  try {
+    await main();
+    await waitForTimeout(5000); // Wait for 5 seconds before responding
 
-		res.status(200).json({ message: 'Action performed successfully' })
-	} catch (error) {
-		console.error('Error performing action:', error)
-		res.status(500).json({ error: 'Error performing action' })
-	}
-}
+    res.status(200).json({ message: 'Action performed successfully' });
+  } catch (error) {
+    console.error('Error performing action:', error);
+    res.status(500).json({ error: 'Error performing action' });
+  }
+};
 
 export default handler

@@ -21,43 +21,7 @@ export default async function handler(
 		settlementType: '',
 	}
 
-	// 1
-	// const data = {
-	// 	assetcodes: ['AST2022306419', 'AST2022306547'],
-	// 	status: 'Mobinnet---Intact_second-hand',
-	// }
-	// const requestBody = {
-	// 	userId: '3198',
-	// 	assetcode: assetCode,
-	// 	status: status,
-	// 	location: "Warehouse > Modem's Store (M003)",
-	// 	customerDetails: '',
-	// 	childAssetcode: '',
-	// 	customerName: '',
-	// 	agentCode: 12345678,
-	// 	isRemoveLink: 0,
-	// 	allottedto: '3107',
-	// 	settlementType: '',
-	// }
 
-	// 2
-	// const data = {
-	// 	assetcodes: ['AST2022306419', 'AST2022306547'],
-	// 	status: 'Mobinnet---Intact_second-hand',
-	// }
-	// const requestBody = {
-	// 	userId: '3198',
-	// 	assetcode: assetCode,
-	// 	status: status,
-	// 	location: "Warehouse > Modem's Store (M003)",
-	// 	customerDetails: '',
-	// 	childAssetcode: '',
-	// 	customerName: '',
-	// 	agentCode: 12345678,
-	// 	isRemoveLink: 1,
-	// 	allottedto: '3107',
-	// 	settlementType: '',
-	// }
 	try {
 		const apiURL = 'http://localhost:8080/api/AssetInstallation'
 		const response = await fetch(apiURL, {

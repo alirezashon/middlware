@@ -6,15 +6,27 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
+<<<<<<< HEAD
+=======
+const loginURL = 'http:/'
+const targetURL = 'http:/'
+
+>>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 const main = async () => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
 	const page = await browser.newPage()
 	await page.goto(`${process.env.ASSET_URL}`)
 
+<<<<<<< HEAD
 	await page.type('#UserName', `${process.env.ASSET_USER}`)
 	await page.type('#Password', `${process.env.ASSET_PASS}`)
 	await page.click('button[type="submit"]')
 	await page.waitForTimeout(1000)
+=======
+	await page.type('#UserName', '')
+	await page.type('#Password', '')
+	await page.click('[type="submit"]')
+>>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
 	// Extract the token from the response or cookies
@@ -94,8 +106,22 @@ const main = async () => {
 	)
 	await page.waitForTimeout(2222)
 
+<<<<<<< HEAD
 	await page.keyboard.press('Enter')
 }
+=======
+		if (selectElement) {
+			selectElement.value = '3107'
+			const event = new Event('change', { bubbles: true })
+			selectElement.dispatchEvent(event)
+		}
+		
+	})
+})
+
+	
+	}
+>>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 
 const waitForTimeout = async (milliseconds: number): Promise<void> => {
 	await new Promise((resolve) => setTimeout(resolve, milliseconds))

@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 /** @format */
 
+=======
+>>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 import { NextApiRequest, NextApiResponse } from 'next'
 import { ElementHandle } from 'puppeteer'
 import puppeteer from 'puppeteer-extra'
@@ -7,13 +10,24 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
+<<<<<<< HEAD
+=======
+const loginURL = 'http:'
+const targetURL = 'http:'
+
+>>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 const main = async () => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
 	const page = await browser.newPage()
 	await page.goto(`${process.env.ASSET_URL}`)
 
+<<<<<<< HEAD
 	await page.type('#UserName', `${process.env.ASSET_USER}`)
 	await page.type('#Password', `${process.env.ASSET_PASS}`)
+=======
+	await page.type('#UserName', '')
+	await page.type('#Password', '')
+>>>>>>> 6e32b5bbadfab291013f647385f310241871822e
 	await page.click('[type="submit"]')
 
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
@@ -64,6 +78,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
 
 export default handler
 
+<<<<<<< HEAD
 // import { NextApiRequest, NextApiResponse } from 'next'
 // import { ElementHandle } from 'puppeteer'
 // import path from 'path'
@@ -190,3 +205,6 @@ export default handler
 // }
 
 // export default handler
+=======
+
+>>>>>>> 6e32b5bbadfab291013f647385f310241871822e

@@ -10,14 +10,15 @@ const main = async () => {
 	const page = await browser.newPage()
 	await page.goto(`${process.env.ASSET_URL}`)
 
+
+	await page.click('.fa-chevron-down',{delay: 777})
 	await page.type('#UserName', `${process.env.ASSET_USER}`)
 	await page.type('#Password', `${process.env.ASSET_PASS}`)
-
-
-	await page.click('[type="submit"]')
-
+	await page.click('button[class="btn btn-block btn-cta-primary"]')
+	
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
-	await page.goto(`${process.env.ASSET_TARGET}`)
+	await page.waitForTimeout(1000)
+ 
 
 	await page.waitForSelector('.btn-asset')
 	await page.click('.btn-asset')

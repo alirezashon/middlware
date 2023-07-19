@@ -12,18 +12,25 @@ const main = async () => {
 	await page.goto(`${process.env.ASSET_URL}`)
 
 
+	await page.click('.fa-chevron-down', { delay: 777 })
 	await page.type('#UserName', `${process.env.ASSET_USER}`)
 	await page.type('#Password', `${process.env.ASSET_PASS}`)
-
-	await page.click('[type="submit"]')
-
+	await page.click('button[class="btn btn-block btn-cta-primary"]')
+	
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
-	await page.goto(`${process.env.ASSET_TARGET}`)
+	await page.waitForTimeout(1000)
 
 	await page.waitForSelector('.AddPlus')
 	await page.click('.AddPlus')
 
-	await page.waitForSelector('.FormAssetCustomFilterViewCustomSearch') // Wait for the button action to complete, adjust the timeout value as needed
+	await page.evaluate(() => {
+		history.pushState(
+			'',
+			document.title,
+			window.location.pathname + window.location.search
+		)
+	})
+	await page.waitForSelector('.FormAssetCustomFilterViewCustomSearch')
 	await page.type(
 		'.FormAssetCustomFilterViewCustomSearch',
 		'AST2023336033,AST2022204888,AST2022306419,AST2022306532,AST2022306533,AST2022306547,AST2023333530,AST2023341263,AST2023344271,AST2023340596'
@@ -32,11 +39,14 @@ const main = async () => {
 
 	await page.waitForSelector('.AssetTrackerFileColumn')
 
-	await new Promise((resolve) => setTimeout(resolve, 6000))
+	await new Promise((resolve) => setTimeout(resolve, 8000))
+	await page.waitForSelector('.select-checkbox')
 	await page.click('.select-checkbox')
 
+	await page.waitForTimeout(3000)
+
 	await page.click('.btn-updateasset')
-	await page.waitForTimeout(3000) // Wait for any additional tasks to complete
+	await page.waitForTimeout(2000)
 
 	const data = [
 		{ AssetName: 'Akbarpoor', Category: 'Programmer', Brand: 'Islamic-Christ' },

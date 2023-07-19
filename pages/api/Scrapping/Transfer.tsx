@@ -11,24 +11,15 @@ const main = async () => {
 	const page = await browser.newPage()
 	await page.goto(`${process.env.ASSET_URL}`)
 
-
+	await page.click('.fa-chevron-down',{delay: 777})
 	await page.type('#UserName', `${process.env.ASSET_USER}`)
 	await page.type('#Password', `${process.env.ASSET_PASS}`)
-	await page.click('button[type="submit"]')
-	await page.waitForTimeout(1000)
-
-
+	await page.click('button[class="btn btn-block btn-cta-primary"]')
+	
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
-	// Extract the token from the response or cookies
-	const response = await page.waitForResponse((res) =>
-		res.url().includes('login_success')
-	) // Replace 'login_success' with the URL that indicates successful login
-	const token = await response.json() // Assuming the response is in JSON format and contains the token
+	await page.waitForTimeout(1000)
+ 
 
-	// Use the extracted token to make authenticated requests
-	// For example, you can include the token in the URL of the new page you want to navigate to
-	const targetUrlWithToken = `${process.env.ASSET_TARGET}?token=${token}` // Replace 'token' with the name of the parameter used in the URL
-	await page.goto(targetUrlWithToken)
 
 	await page.waitForSelector('.AddPlus')
 	await page.click('.AddPlus')
@@ -95,21 +86,20 @@ const main = async () => {
 		'پیشگامان سخت افزار تیراژه'
 	)
 	await page.waitForTimeout(2222)
-
 }
-	const waitForTimeout = async (milliseconds: number): Promise<void> => {
-		await new Promise((resolve) => setTimeout(resolve, milliseconds));
-	};
+const waitForTimeout = async (milliseconds: number): Promise<void> => {
+	await new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
 
-	const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
-		try {
-			await main();
-			await waitForTimeout(5000); // Wait for 5 seconds before responding
+const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
+	try {
+		await main()
+		await waitForTimeout(5000) // Wait for 5 seconds before responding
 
-			res.status(200).json({ message: 'Action performed successfully' });
-		} catch (error) {
-			console.error('Error performing action:', error);
-			res.status(500).json({ error: 'Error performing action' });
-		}
+		res.status(200).json({ message: 'Action performed successfully' })
+	} catch (error) {
+		console.error('Error performing action:', error)
+		res.status(500).json({ error: 'Error performing action' })
 	}
-	export default handler
+}
+export default handler

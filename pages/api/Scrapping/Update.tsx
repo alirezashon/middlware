@@ -1,5 +1,9 @@
 /** @format */
 
+// DATA SAMPLE 
+// const data = [{assetCode:value, assetName:value, category:value , agentName:value}] 
+
+
 import { NextApiRequest, NextApiResponse } from 'next'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'

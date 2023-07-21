@@ -244,8 +244,36 @@ const ExcelReader = () => {
 	const newRows = newItems.map((array) => array.slice(1))
 	const oldRows = oldItems.map((array) => array.slice(1))
 
+	const CSV = excelData.map((array) => array.slice(2))
+
+	const handleGenerateCSV = async () => {
+		try {
+			// Send the 'dataArray' to the API endpoint
+			const response = await fetch('/api/GenerateCSV', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ data: CSV }),
+			})
+
+			// Trigger the download
+			const csvContent = await response.text()
+			const blob = new Blob([csvContent], { type: 'text/csv' })
+			const url = URL.createObjectURL(blob)
+			const link = document.createElement('a')
+			link.href = url
+			link.download = 'data.csv'
+			link.click()
+			URL.revokeObjectURL(url)
+		} catch (error) {
+			console.error('Error generating CSV:', error)
+		}
+	}
 	return (
 		<>
+			<button onClick={handleGenerateCSV}>Generate CSV</button>
+
 			<div
 				style={
 					progress == 0

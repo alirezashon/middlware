@@ -3,12 +3,13 @@ import React from 'react'
 
 const CsvGenerator: React.FC = () => {
 	const dataArray = [
-		{ id: 1, name: 'John', age: 30 },
-		{ id: 2, rame: 'Jane', gage: 25 },
-    { id: 3, lame: 'Mike', tage: 40 },
-    { id: 1, same: 'Johni', fage: 350 },
-		{ id: 2, jame: 'Janes', rage: 285 },
-		{ id: 3, kame: 'Mikel', mage: 470 },
+		['id','name','age','azina',22,33,44],[1,'ali',22],[2,'mohammad',33]
+	// 	{ id: 1, name: 'John', age: 30 },
+	// 	{ id: 2, rame: 'Jane', gage: 25 },
+    // { id: 3, lame: 'Mike', tage: 40 },
+    // { id: 1, same: 'Johni', fage: 350 },
+	// 	{ id: 2, jame: 'Janes', rage: 285 },
+	// 	{ id: 3, kame: 'Mikel', mage: 470 },
 		// Add more data as needed
 	]
 

@@ -1,5 +1,9 @@
 /** @format */
 
+// DATA SAMPLE 
+// const data = [{assetCode:value, city:value, contractor:value '}] 
+
+
 import { NextApiRequest, NextApiResponse } from 'next'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
@@ -11,15 +15,13 @@ const main = async () => {
 	const page = await browser.newPage()
 	await page.goto(`${process.env.ASSET_URL}`)
 
-	await page.click('.fa-chevron-down',{delay: 777})
+	await page.click('.fa-chevron-down', { delay: 777 })
 	await page.type('#UserName', `${process.env.ASSET_USER}`)
 	await page.type('#Password', `${process.env.ASSET_PASS}`)
 	await page.click('button[class="btn btn-block btn-cta-primary"]')
-	
+
 	await page.waitForNavigation({ waitUntil: 'networkidle0' })
 	await page.waitForTimeout(1000)
- 
-
 
 	await page.waitForSelector('.AddPlus')
 	await page.click('.AddPlus')
@@ -44,9 +46,10 @@ const main = async () => {
 	await new Promise((resolve) => setTimeout(resolve, 8000))
 	await page.waitForSelector('.select-checkbox')
 	await page.click('.select-checkbox')
-
+	/////A//I/N/A/A//I/N/A/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// await page.setDefaultTimeout(3000)
 	await page.waitForTimeout(3000)
-
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	await page.click('.btn-assettransfer')
 
 	await page.waitForTimeout(3000)
@@ -85,7 +88,7 @@ const main = async () => {
 		'.select2-search--dropdown input[class="select2-search__field"]',
 		'پیشگامان سخت افزار تیراژه'
 	)
-	await page.waitForTimeout(2222)
+	await page.keyboard.press('Enter')
 }
 const waitForTimeout = async (milliseconds: number): Promise<void> => {
 	await new Promise((resolve) => setTimeout(resolve, milliseconds))

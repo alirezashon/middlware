@@ -214,6 +214,13 @@ const ExcelReader = () => {
 		  }, [])
 		: []
 
+ const updatedExistData  = existData.reduce((result, obj) => {
+  const matchingArray = excelData.find((array) => array[7] === obj.serial);
+    return [...result, { ...obj, agent: matchingArray[49] }];
+}, []);
+
+const ali = excelData[1]
+
 	const ContradictionCategory = existData.filter((obj) => {
 		const matchingArray = excelData.find((array) => array[7] == obj.serial)
 		return (
@@ -272,8 +279,9 @@ const ExcelReader = () => {
 	}
 	return (
 		<>
+			<h1>{ali}</h1>
+			{JSON.stringify(updatedExistData)}
 			<button onClick={handleGenerateCSV}>Generate CSV</button>
-
 			<div
 				style={
 					progress == 0

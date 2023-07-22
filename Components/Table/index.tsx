@@ -28,7 +28,7 @@ const Table: React.FC<TableProps> = ({
 							<td
 								key={index}
 								style={
-									key === 'assetName'
+					 				key === 'assetName'
 										? { backgroundColor: '#fae337' }
 										: undefined
 								}>

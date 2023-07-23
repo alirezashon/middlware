@@ -8,6 +8,7 @@ import CheckList from '../Components/CheckList'
 import Table from '../Components/Table'
 import GenerateExcel from '../Components/GenerateExcel'
 import GenerateCSV from '../Components/GenerateCSV'
+import ProcessData from '../Components/ProcessData'
 const ExcelReader = () => {
 	const fileInputRef = useRef(null)
 	const svgRef = useRef(null)
@@ -216,7 +217,10 @@ const ExcelReader = () => {
 
 	const updatedExistData = existData.reduce((result, obj) => {
 		const matchingArray = excelData.find((array) => array[7] === obj.serial)
-		return [...result, { ...obj, agent: matchingArray[49] }]
+		return [
+			...result,
+			{ ...obj, newAssetName: matchingArray[2], newCategory : matchingArray[4] ,newAgent: matchingArray[49] },
+		]
 	}, [])
 
 
@@ -255,6 +259,8 @@ const ExcelReader = () => {
 	
 	return (
 		<>
+			{/* {JSON.stringify(updatedExistData)} */}
+			<ProcessData props = {updatedExistData} />
 			{excelData.length > 0 && <GenerateCSV data={excelData}/>}
 			<div
 				style={

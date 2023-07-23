@@ -63,6 +63,13 @@ const main = async () => {
 		{ AssetName: 'Mohammad', Category: 'The Warrior', Brand: 'Islamic' },
 		{ AssetName: 'Chirst', Category: 'Healer', Brand: 'Christian' },
 		{ AssetName: 'Akbarpoor', Category: 'Programmer', Brand: 'Islamic-Christ' },
+		{ AssetName: 'Mohammad', Category: 'The Warrior', Brand: 'Islamic' },
+		{ AssetName: 'Chirst', Category: 'Healer', Brand: 'Christian' },
+		{ AssetName: 'Akbarpoor', Category: 'Programmer', Brand: 'Islamic-Christ' },
+		{ AssetName: 'Mohammad', Category: 'The Warrior', Brand: 'Islamic' },
+		{ AssetName: 'Chirst', Category: 'Healer', Brand: 'Christian' },
+		{ AssetName: 'Akbarpoor', Category: 'Programmer', Brand: 'Islamic-Christ' },
+	
 	]
 
 	for (let i = 0; i < data.length; i++) {

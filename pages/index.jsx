@@ -7,7 +7,7 @@ import { createHexagonImage } from '../Components/createHexagonImage'
 import CheckList from '../Components/CheckList'
 import Table from '../Components/Table'
 import GenerateExcel from '../Components/GenerateExcel'
-
+import GenerateCSV from '../Components/GenerateCSV'
 const ExcelReader = () => {
 	const fileInputRef = useRef(null)
 	const svgRef = useRef(null)
@@ -132,7 +132,7 @@ const ExcelReader = () => {
 			worksheet.eachRow((row) => {
 				const rowData = row.values.map((cell) => cell.toString())
 				if (row.number === 1) {
-					setExcelHeader(rowData.slice(1))
+					setExcelHeader(rowData)
 				} else {
 					// const filteredArray = rowData.filter((item) => item);
 					jsonData.push(rowData)
@@ -214,12 +214,11 @@ const ExcelReader = () => {
 		  }, [])
 		: []
 
- const updatedExistData  = existData.reduce((result, obj) => {
-  const matchingArray = excelData.find((array) => array[7] === obj.serial);
-    return [...result, { ...obj, agent: matchingArray[49] }];
-}, []);
+	const updatedExistData = existData.reduce((result, obj) => {
+		const matchingArray = excelData.find((array) => array[7] === obj.serial)
+		return [...result, { ...obj, agent: matchingArray[49] }]
+	}, [])
 
-const ali = excelData[1]
 
 	const ContradictionCategory = existData.filter((obj) => {
 		const matchingArray = excelData.find((array) => array[7] == obj.serial)
@@ -251,37 +250,12 @@ const ali = excelData[1]
 	const newRows = newItems.map((array) => array.slice(1))
 	const oldRows = oldItems.map((array) => array.slice(1))
 
-	const CSV = excelData.map((array) => array.slice(2))
 
-	const handleGenerateCSV = async () => {
-		try {
-			// Send the 'dataArray' to the API endpoint
-			const response = await fetch('/api/GenerateCSV', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ data: CSV }),
-			})
-
-			// Trigger the download
-			const csvContent = await response.text()
-			const blob = new Blob([csvContent], { type: 'text/csv' })
-			const url = URL.createObjectURL(blob)
-			const link = document.createElement('a')
-			link.href = url
-			link.download = 'data.csv'
-			link.click()
-			URL.revokeObjectURL(url)
-		} catch (error) {
-			console.error('Error generating CSV:', error)
-		}
-	}
+	
+	
 	return (
 		<>
-			<h1>{ali}</h1>
-			{JSON.stringify(updatedExistData)}
-			<button onClick={handleGenerateCSV}>Generate CSV</button>
+			{excelData.length > 0 && <GenerateCSV data={excelData}/>}
 			<div
 				style={
 					progress == 0

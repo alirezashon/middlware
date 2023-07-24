@@ -28,6 +28,7 @@ const ExcelReader = () => {
 		setIsDialogVisible(false)
 	}
 	//////////////////////////Top codes are about generate buttons dialog//////////////////////////////////////////////
+
 	useEffect(() => {
 		const svg = d3.select(svgRef.current)
 		const { width, height } = svg.node().getBoundingClientRect()
@@ -39,38 +40,76 @@ const ExcelReader = () => {
 			d3.select(svgRef.current).selectAll('*').remove()
 		}
 
+		const createOval = (svg, rx, ry, cx, cy, color, strokeWidth, rotate) => {
+			return (
+				svg
+					.append('ellipse')
+					.attr('rx', rx)
+					.attr('ry', ry)
+					.attr('cx', cx)
+					.attr('cy', cy)
+					.attr('fill', 'none')
+					.attr('stroke', color)
+					.attr('stroke-width', strokeWidth)
+					.transition()
+					.duration(progress == 0 || progress == 100 ? 2000 : 0)
+					.attrTween('transform', () =>
+						d3.interpolateString('rotate(100)', 'rotate(30)')
+					)
+					.attr('transform', `rotate(${rotate} ${cx} ${cy})`)
+			)
+		}
+
+		// Array of Oval configurations (rx, ry, cx, cy, color, strokeWidth, rotate)
+		const ovalConfigs = [
+			{
+				rx: progress === 0 ? 240 : 144,
+				ry: 66,
+				cx: width / 2,
+				cy: progress === 0 ? height / 4 : height / 2,
+				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				strokeWidth: 2,
+				rotate: 0, // Rotate the first oval by 45 degrees
+			},
+			{
+				rx: progress === 0 ? 240 : 144,
+				ry: 66,
+				cx: width / 2,
+				cy: progress === 0 ? height / 4 : height / 2,
+				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				strokeWidth: 2,
+				rotate: 135, // Rotate the second oval by 135 degrees
+			},
+			{
+				rx: progress === 0 ? 240 : 144,
+				ry: 66,
+				cx: width / 2,
+				cy: progress === 0 ? height / 4 : height / 2,
+				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				strokeWidth: 2,
+				rotate: 45, // Rotate the third oval by 90 degrees
+			},
+			{
+				rx: progress === 0 ? 240 : 144,
+				ry: 66,
+				cx: width / 2,
+				cy: progress === 0 ? height / 4 : height / 2,
+				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				strokeWidth: 2,
+				rotate: 90, // Rotate the third oval by 90 degrees
+			},
+			// Add more oval configurations here as needed
+		]
+		// Create the ovals based on the array of oval configurations
+		ovalConfigs.forEach(({ rx, ry, cx, cy, color, strokeWidth, rotate }) => {
+			createOval(svg, rx, ry, cx, cy, color, strokeWidth, rotate)
+		})
+
 		const hexagonImage = createHexagonImage(
 			'/images/logo.jpg',
 			55,
 			hexagonColor
 		)
-		const circleRadius = 2 * 55 // 2 times the hexagon size
-
-		// Append the circle to the SVG
-		const Maincircle = svg
-			.append('circle')
-			.attr('cx', width / 2)
-			.attr(
-				'cy',
-				progress === 0 || progress === 100 ? height / 2.5 : height / 2
-			)
-			.attr('r', circleRadius)
-			.attr('fill', 'none')
-			.attr('stroke', '#f0f0f0')
-			.attr('stroke-width', 2)
-
-		const circle = svg
-			.append('circle')
-			.attr('cx', width / 2)
-			.attr(
-				'cy',
-				progress === 0 || progress === 100 ? height / 2.5 : height / 2
-			)
-			.attr('r', circleRadius)
-			.attr('fill', 'none')
-			.attr('stroke', progress === 100 ? '#f0f0f0' : 'yellow')
-			.attr('stroke-width', 2)
-
 		const hexagonContainer = svg.append('g')
 
 		// Append the hexagon image to the SVG
@@ -79,10 +118,7 @@ const ExcelReader = () => {
 		// Position and interact with the hexagon image
 		d3.select(hexagonImage)
 			.attr('x', width / 2 - 59)
-			.attr(
-				'y',
-				progress === 0 || progress === 100 ? height / 2.5 - 59 : height / 2 - 59
-			)
+			.attr('y', progress === 0 ? height / 4 - 59 : height / 2 - 59)
 			.attr('cursor', 'grab')
 			.call(
 				d3
@@ -95,13 +131,38 @@ const ExcelReader = () => {
 					.on('end', () => {
 						d3.select(hexagonImage)
 							.attr('x', width / 2 - 55)
-							.attr('y', height / 3 - 55)
+							.attr('y', height / 4 - 55)
 					})
 			)
 			.on('click', () => {
 				fileInputRef.current.click()
 			})
 
+		const circleRadius = progress >0 ? 160 : 247 // 2 times the hexagon size
+
+		// Append the circle to the SVG
+		const Maincircle = svg
+			.append('circle')
+			.attr('cx', width / 2)
+			.attr('cy', progress === 0 ? height / 4 : height / 2)
+			.attr('r', circleRadius)
+			.attr('fill', 'none')
+			.attr('stroke', '#c4f268')
+			.attr('stroke-width', 2)
+
+		const circle = svg
+			.append('circle')
+			.attr('cx', width / 2)
+			.attr(
+				'cy',
+				progress === 0
+					? height / 4
+					: height / 2 
+			)
+			.attr('r', circleRadius)
+			.attr('fill', 'none')
+			.attr('stroke', progress === 100 ? '#f0f0f0' : 'yellow')
+			.attr('stroke-width', 2)
 		// Update the circle based on the progress percentage
 		const progressPercentage = progress + '%'
 		const circumference = 2 * Math.PI * circleRadius
@@ -219,10 +280,14 @@ const ExcelReader = () => {
 		const matchingArray = excelData.find((array) => array[7] === obj.serial)
 		return [
 			...result,
-			{ ...obj, newAssetName: matchingArray[2], newCategory : matchingArray[4] ,newAgent: matchingArray[49] },
+			{
+				...obj,
+				newAssetName: matchingArray[2],
+				newCategory: matchingArray[4],
+				newAgent: matchingArray[49],
+			},
 		]
 	}, [])
-
 
 	const ContradictionCategory = existData.filter((obj) => {
 		const matchingArray = excelData.find((array) => array[7] == obj.serial)
@@ -254,21 +319,20 @@ const ExcelReader = () => {
 	const newRows = newItems.map((array) => array.slice(1))
 	const oldRows = oldItems.map((array) => array.slice(1))
 
-
-	
-	
 	return (
 		<>
 			{/* {JSON.stringify(updatedExistData)} */}
-			<ProcessData props = {updatedExistData} />
-			{excelData.length > 0 && <GenerateCSV data={excelData}/>}
+			<ProcessData data = {updatedExistData} />
+			{/* {excelData.length > 0 && <GenerateCSV data={excelData} />} */}
 			<div
 				style={
 					progress == 0
 						? {
-								height: '120vh',
+								overflowY: 'hidden',
+								margin: -10,
+								height: '100vh',
 								backgroundImage:
-									'radial-gradient(circle at 50% 50%, #cdeb97 46.67%, #ddf1c8 20.33%, #dae7b9 50%, #e5f3a7 26.67%, #d8e7c0 83.33%, #d7e9a8 10%, #d9ebbd)',
+									'radial-gradient(circle at 50% 48%, #cdeb97 24%, #e9fcae 29%, #dae7b9 20%, #e5f3a7 28.67%, #d8e7c0 40.33%, #d7e9a8 60%, #d9ebbd)',
 						  }
 						: {}
 				}>
@@ -276,14 +340,15 @@ const ExcelReader = () => {
 					className='svg-container'
 					style={{
 						backgroundColor:
-							progress === 0 || progress === 100
+							progress === 0 
 								? 'rgba(0,0,0,0)'
-								: 'rgba(40,40,40,0.9)',
-						width: progress === 0 ? '100%' : '20%',
+								: 'rgba(30,90,90,0.6)',
+						width: progress === 0 ? '100%' : '22%',
 						height: progress === 0 ? '100vh' : '40vh',
 						marginLeft: progress === 0 ? '0' : '40%',
-						paddingTop: progress === 0 ? '9%' : '0',
+						paddingTop: progress === 0 ? '9%' : '0vh',
 						borderRadius: progress === 0 ? '0' : '100%',
+
 					}}
 					ref={svgRef}></svg>
 				{progress > 0 && progress < 101 && <div class='background_gif'> </div>}

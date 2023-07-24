@@ -5,9 +5,9 @@ interface ProcessDataProps {
 const ProcessData : React.FC<ProcessDataProps> = ({  data }) => {
  
  return (
-     <div>
-      <button>Generate CSV</button>
+   <div>
          {JSON.stringify(data)}
+      <button>Generate CSV</button>
     </div>
   );
 };

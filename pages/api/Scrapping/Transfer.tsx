@@ -1,16 +1,19 @@
 /** @format */
 
-// DATA SAMPLE 
-// const data = [{assetCode:value, city:value, contractor:value '}] 
-
+// DATA SAMPLE
+// const data = [{assetCode:value, city:value, contractor:value '}]
 
 import { NextApiRequest, NextApiResponse } from 'next'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
-
-const main = async () => {
+interface AssetData {
+	AssetCode: string
+	City: string
+	Agent: string
+}
+const main = async (data: AssetData[]) => {
 	const browser = await puppeteer.launch({ headless: false }) // Open a visible browser window
 	const page = await browser.newPage()
 	await page.goto(`${process.env.ASSET_URL}`)
@@ -35,10 +38,9 @@ const main = async () => {
 	})
 
 	await page.waitForSelector('.FormAssetCustomFilterViewCustomSearch')
-	await page.type(
-		'.FormAssetCustomFilterViewCustomSearch',
-		'AST2023336033,AST2022204888,AST2022306419,AST2022306532,AST2022306533,AST2022306547,AST2023333530,AST2023341263,AST2023344271,AST2023340596'
-	)
+
+	const assetCodes = data.map((asset) => asset.AssetCode).join(',')
+	await page.type('.FormAssetCustomFilterViewCustomSearch', assetCodes)
 	await page.click('.FormAssetCustomFilterViewCustomSearch')
 
 	await page.waitForSelector('.AssetTrackerFileColumn')
@@ -96,7 +98,59 @@ const waitForTimeout = async (milliseconds: number): Promise<void> => {
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
 	try {
-		await main()
+		const data = [
+			{
+				AssetCode: 'AST2023336033',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2022204888',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2022306419',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2022306532',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2022306533',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2022306547',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2023333530',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2023341263',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2023344271',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+			{
+				AssetCode: 'AST2023340596',
+				City: 'Tehran',
+				Agent: 'پیشگامان سخت افزار تیراژه',
+			},
+		]
+		await main(data)
 		await waitForTimeout(5000) // Wait for 5 seconds before responding
 
 		res.status(200).json({ message: 'Action performed successfully' })

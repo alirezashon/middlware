@@ -137,9 +137,10 @@ const main = async (data: AssetData[]) => {
 		)
 	})
 	await page.waitForSelector('.FormAssetCustomFilterViewCustomSearch')
+	const assetCodes = data.map((asset) => asset.AssetCode).join(',')
 	await page.type(
 		'.FormAssetCustomFilterViewCustomSearch',
-		'AST2023336033,AST2022204888,AST2022306419,AST2022306532,AST2022306533,AST2022306547,AST2023333530,AST2023341263,AST2023344271,AST2023340596'
+		assetCodes
 	)
 	await page.click('.FormAssetCustomFilterViewCustomSearch')
 
@@ -321,6 +322,11 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
 }
 
 export default handler
+
+
+
+
+
 
 // // DATA SAMPLE
 // // const data = [{assetCode:value, assetName:value, category:value , agentName:value}]

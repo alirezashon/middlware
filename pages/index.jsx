@@ -67,7 +67,7 @@ const ExcelReader = () => {
 				ry: 66,
 				cx: width / 2,
 				cy: progress === 0 ? height / 4 : height / 2,
-				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				color: progress === 0 ?  '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 0, // Rotate the first oval by 45 degrees
 			},
@@ -76,7 +76,7 @@ const ExcelReader = () => {
 				ry: 66,
 				cx: width / 2,
 				cy: progress === 0 ? height / 4 : height / 2,
-				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				color: progress === 0 ?  '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 135, // Rotate the second oval by 135 degrees
 			},
@@ -85,7 +85,7 @@ const ExcelReader = () => {
 				ry: 66,
 				cx: width / 2,
 				cy: progress === 0 ? height / 4 : height / 2,
-				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				color: progress === 0 ?  '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 45, // Rotate the third oval by 90 degrees
 			},
@@ -94,7 +94,7 @@ const ExcelReader = () => {
 				ry: 66,
 				cx: width / 2,
 				cy: progress === 0 ? height / 4 : height / 2,
-				color: progress === 0 ?  '#f0f0f0' : '#28d7eb',
+				color: progress === 0 ?  '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 90, // Rotate the third oval by 90 degrees
 			},
@@ -322,7 +322,7 @@ const ExcelReader = () => {
 	return (
 		<>
 			{/* {JSON.stringify(updatedExistData)} */}
-			<ProcessData data = {updatedExistData} />
+			{/* <ProcessData data = {updatedExistData} /> */}
 			{/* {excelData.length > 0 && <GenerateCSV data={excelData} />} */}
 			<div
 				style={

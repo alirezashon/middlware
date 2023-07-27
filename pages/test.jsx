@@ -142,8 +142,20 @@ const ExcelReader = () => {
 
 		createMultipleLightnings()
 
-		const createOval = (svg, rx, ry, cx, cy, color, strokeWidth, rotate) => {
-			return svg
+		const createElectron = (
+			svg,
+			rx,
+			ry,
+			cx,
+			cy,
+			color,
+			strokeWidth,
+			rotate,
+			electronRadius,
+			electronSpacing,
+			electronCount
+		) => {
+			const orbit = svg
 				.append('ellipse')
 				.attr('rx', rx)
 				.attr('ry', ry)
@@ -152,14 +164,40 @@ const ExcelReader = () => {
 				.attr('fill', 'none')
 				.attr('stroke', color)
 				.attr('stroke-width', strokeWidth)
-				.transition()
-				.duration(progress == 0 || progress == 100 ? 2000 : 0)
-				.attrTween('transform', () =>
-					d3.interpolateString('rotate(100)', 'rotate(30)')
-				)
 				.attr('transform', `rotate(${rotate} ${cx} ${cy})`)
-		}
 
+			const electrons = []
+			for (let i = 0; i < electronCount; i++) {
+				const electron = svg
+					.append('circle')
+					.attr('r', electronRadius)
+					.attr('fill', color)
+				electrons.push(electron)
+			}
+
+			// Function to update the position of the electrons along the orbit path
+			const updateElectronPosition = () => {
+				const angle = (performance.now() / 100) % 360 // Calculate the angle based on time for continuous rotation
+				for (let i = 0; i < electrons.length; i++) {
+					const electronAngle = angle + (i * 360) / electronCount // Distribute the electrons evenly along the orbit
+					const x =
+						cx + rx * Math.cos((electronAngle + rotate) * (Math.PI / 180))
+					const y =
+						cy + ry * Math.sin((electronAngle + rotate) * (Math.PI / 180))
+					electrons[i]
+						.attr('cx', x)
+						.attr('cy', y)
+						.attr('transform', `rotate(${rotate} ${cx} ${cy})`)
+
+				}
+				requestAnimationFrame(updateElectronPosition) // Request the next animation frame for smooth rotation
+			}
+
+			// Call the function to update the electron positions
+			updateElectronPosition()
+
+			return { orbit, electrons }
+		}
 		// Array of Oval configurations (rx, ry, cx, cy, color, strokeWidth, rotate)
 		const ovalConfigs = [
 			{
@@ -170,6 +208,9 @@ const ExcelReader = () => {
 				color: progress === 0 ? '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 0, // Rotate the first oval by 45 degrees
+				electronRadius: 7,
+				electronSpacing: 20,
+				electronCount: 6,
 			},
 			{
 				rx: progress === 0 ? 240 : 144,
@@ -179,6 +220,9 @@ const ExcelReader = () => {
 				color: progress === 0 ? '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 135, // Rotate the second oval by 135 degrees
+				electronRadius: 7,
+				electronSpacing: 20,
+				electronCount: 6,
 			},
 			{
 				rx: progress === 0 ? 240 : 144,
@@ -188,6 +232,9 @@ const ExcelReader = () => {
 				color: progress === 0 ? '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 45, // Rotate the third oval by 90 degrees
+				electronRadius: 7,
+				electronSpacing: 20,
+				electronCount: 6,
 			},
 			{
 				rx: progress === 0 ? 240 : 144,
@@ -197,120 +244,134 @@ const ExcelReader = () => {
 				color: progress === 0 ? '#ffffff' : '#28d7eb',
 				strokeWidth: 2,
 				rotate: 90, // Rotate the third oval by 90 degrees
+				electronRadius: 7,
+				electronSpacing: 20,
+				electronCount: 6,
 			},
 			// Add more oval configurations here as needed
 		]
 		// Create the ovals based on the array of oval configurations
-		ovalConfigs.forEach(({ rx, ry, cx, cy, color, strokeWidth, rotate }) => {
-			createOval(svg, rx, ry, cx, cy, color, strokeWidth, rotate)
-		})
+		const orbits = ovalConfigs.map((config) =>
+			createElectron(svg, ...Object.values(config))
+		)
+
+		// ovalConfigs.forEach(({ rx, ry, cx, cy, color, strokeWidth, rotate, electronRadius,electronSpacing,electronCount }) => {
+		// 	createOval(svg, rx, ry, cx, cy, color, strokeWidth, rotate, electronRadius,electronSpacing,electronCount)
+		// })
 
 		// Define a reusable circle generator function
-	function createCircle(selection, cx, cy, radius, fill, stroke, strokeWidth) {
-		return selection
-			.append('circle')
-			.attr('cx', cx)
-			.attr('cy', cy)
-			.attr('r', radius)
-			.attr('fill', fill)
-			.attr('stroke', stroke)
-			.attr('stroke-width', strokeWidth)
-	}
-
-	const circleBg = createCircle(
-		svg,
-		width / 2,
-		height / 2,
-		55,
-		'#FFFFFF',
-		'none',
-		0
-	)
-
-	const clipPath = svg
-		.append('defs')
-		.append('clipPath')
-		.attr('id', 'circleClipMenu')
-	createCircle(clipPath, width / 2, height / 2, 55, 'none', 'none', 0)
-
-	const images = svg
-		.append('image')
-		.attr('x', width / 2 - 55)
-		.attr('y', progress === 0 ? height / 2 - 55 : height / 2 - 55)
-		.attr('width', 110)
-		.attr('height', 110)
-		.attr('clip-path', 'url(#circleClipMenu)')
-		.attr('xlink:href', '/images/logo.jpg')
-		.attr('cursor', 'pointer')
-		.on('click', () => {
-			fileInputRef.current.click()
-		})
-
-	// Add a red border around the circle image
-	const borderCircleRadius = 60
-	createCircle(
-		svg,
-		width / 2,
-		height / 2,
-		borderCircleRadius,
-		'none',
-		'#7bb2d1',
-		3
-	)
-
-	// Add drag functionality to the image
-	d3.select(images.node()).call(
-		d3
-			.drag()
-			.on('drag', (event) => {
-				const newX = event.x - 33
-				const newY = event.y - 33
-				images.attr('x', newX).attr('y', newY)
-			})
-			.on('end', () => {
-				images
-					.attr('x', width / 2 - 55)
-					.attr('y', progress === 0 ? height / 4 - 55 : height / 2 - 55)
-			})
-	)
-
-	const circleRadius = progress > 0 ? 160 : 247 // 2 times the hexagon size
-
-	// Circle generator method for other circles
-	function createMainCircle(selection, radius, strokeColor) {
-		return createCircle(
+		function createCircle(
 			selection,
+			cx,
+			cy,
+			radius,
+			fill,
+			stroke,
+			strokeWidth
+		) {
+			return selection
+				.append('circle')
+				.attr('cx', cx)
+				.attr('cy', cy)
+				.attr('r', radius)
+				.attr('fill', fill)
+				.attr('stroke', stroke)
+				.attr('stroke-width', strokeWidth)
+		}
+
+		const circleBg = createCircle(
+			svg,
 			width / 2,
 			height / 2,
-			radius,
+			55,
+			'#FFFFFF',
 			'none',
-			strokeColor,
-			2
+			0
 		)
-	}
 
-	const Maincircle = createMainCircle(svg, circleRadius, '#36769c')
-	const circle = createMainCircle(
-		svg,
-		circleRadius,
-		progress === 100 ? '#ffffff' : 'yellow'
-	)
+		const clipPath = svg
+			.append('defs')
+			.append('clipPath')
+			.attr('id', 'circleClipMenu')
+		createCircle(clipPath, width / 2, height / 2, 55, 'none', 'none', 0)
 
-	// Update the circle based on the progress percentage
-	const progressPercentage = progress + '%'
-	const circumference = 2 * Math.PI * circleRadius
-	const progressOffset = circumference * (1 - progress / 100)
+		const images = svg
+			.append('image')
+			.attr('x', width / 2 - 55)
+			.attr('y', progress === 0 ? height / 2 - 55 : height / 2 - 55)
+			.attr('width', 110)
+			.attr('height', 110)
+			.attr('clip-path', 'url(#circleClipMenu)')
+			.attr('xlink:href', '/images/logo.jpg')
+			.on('click', () => {
+				fileInputRef.current.click()
+			})
+			.attr('cursor', 'pointer')
 
-	circle
-		.attr('stroke-dasharray', `${circumference} ${circumference}`)
-		.attr('stroke-dashoffset', progressOffset)
+		// Add a red border around the circle image
+		const borderCircleRadius = 60
+		createCircle(
+			svg,
+			width / 2,
+			height / 2,
+			borderCircleRadius,
+			'none',
+			'#7bb2d1',
+			3
+		)
 
-		}, [hexagonColor, progress])
-		
-		/////////////////////////////end/of/hexagon/creating///////////////////////////////////////////
-		
-		const handleFileChange = async (event) => {
-			const file = event.target.files[0]
+		// Add drag functionality to the image
+		d3.select(images.node()).call(
+			d3
+				.drag()
+				.on('drag', (event) => {
+					const newX = event.x - 33
+					const newY = event.y - 33
+					images.attr('x', newX).attr('y', newY)
+				})
+				.on('end', () => {
+					images
+						.attr('x', width / 2 - 55)
+						.attr('y', progress === 0 ? height / 4 - 55 : height / 2 - 55)
+				})
+		)
+
+		const circleRadius = progress > 0 ? 160 : 247 // 2 times the hexagon size
+
+		// Circle generator method for other circles
+		function createMainCircle(selection, radius, strokeColor) {
+			return createCircle(
+				selection,
+				width / 2,
+				height / 2,
+				radius,
+				'none',
+				strokeColor,
+				2
+			)
+		}
+
+		const Maincircle = createMainCircle(svg, circleRadius, '#36769c')
+		const circle = createMainCircle(
+			svg,
+			circleRadius,
+			progress === 100 ? '#ffffff' : 'yellow'
+		)
+
+		// Update the circle based on the progress percentage
+		const progressPercentage = progress + '%'
+		const circumference = 2 * Math.PI * circleRadius
+		const progressOffset = circumference * (1 - progress / 100)
+
+		circle
+			.attr('stroke-dasharray', `${circumference} ${circumference}`)
+			.attr('stroke-dashoffset', progressOffset)
+	}, [hexagonColor, progress])
+
+	/////////////////////////////end/of/hexagon/creating///////////////////////////////////////////
+
+	const handleFileChange = async (event) => {
+		const file = event.target.files[0]
 		setHexagonColor('silver')
 		try {
 			const workbook = new ExcelJS.Workbook()

@@ -43,6 +43,29 @@ const main = async (data: AssetData[]) => {
 	await page.type('.FormAssetCustomFilterViewCustomSearch', assetCodes)
 	await page.click('.FormAssetCustomFilterViewCustomSearch')
 
+	await page.click('a[class="chosen-single"]')
+	await page.type('div[class="chosen-search"] input', 'Agent Name')
+	await page.waitForTimeout(3000)
+
+	await page.keyboard.press('Enter')
+
+	await page.screenshot({ path: './modified_page.png' })
+
+	// Evaluate a function in the browser context to change the text
+	await page.evaluate(() => {
+		const spanElement = document.querySelector('span')
+		if (spanElement) {
+			spanElement.textContent = 'Ali'
+		}
+	})
+
+	await page.click('.chosen-container-active')
+	await page.type(
+		'chosen-single[span]',
+		'پیشگامان سخت افزار تیراژه'
+	)
+	await page.keyboard.press('Enter')
+
 	await page.waitForSelector('.AssetTrackerFileColumn')
 
 	await new Promise((resolve) => setTimeout(resolve, 8000))

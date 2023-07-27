@@ -161,7 +161,7 @@ const ExcelReader = () => {
 			)
 			.attr('r', circleRadius)
 			.attr('fill', 'none')
-			.attr('stroke', progress === 100 ? '#f0f0f0' : 'yellow')
+			.attr('stroke', progress === 100 ? '#ffffff' : 'yellow')
 			.attr('stroke-width', 2)
 		// Update the circle based on the progress percentage
 		const progressPercentage = progress + '%'
@@ -351,7 +351,7 @@ const ExcelReader = () => {
 
 					}}
 					ref={svgRef}></svg>
-				{progress > 0 && progress < 101 && <div class='background_gif'> </div>}
+				{progress > 0 && progress < 100 && <div class='background_gif'> </div>}
 				<input
 					type='file'
 					style={{ display: 'none' }}

@@ -122,56 +122,7 @@ const waitForTimeout = async (milliseconds: number): Promise<void> => {
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
 	try {
 		const data = [
-			{
-				AssetCode: 'AST2023336033',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2022204888',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2022306419',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2022306532',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2022306533',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2022306547',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2023333530',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2023341263',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2023344271',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
-			{
-				AssetCode: 'AST2023340596',
-				City: 'Tehran',
-				Agent: 'پیشگامان سخت افزار تیراژه',
-			},
+		
 		]
 		await main(data)
 		await waitForTimeout(5000) // Wait for 5 seconds before responding

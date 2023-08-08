@@ -299,7 +299,15 @@ const ExcelReader = () => {
 		const matchingArray = excelData.find((array) => array[7] == obj.serial)
 		return matchingArray && matchingArray[2] !== obj.assetName
 	})
-
+	const BothContradiction = ContradictionCategory.filter((category) =>
+		ContradictionName.some((name) => category.assetCode === name.assetCode)
+	)
+	const filteredContradictionCategory = ContradictionCategory.filter(
+		(item1) => !BothContradiction.some((item3) => item3.assetCode === item1.assetCode)
+	)
+	const filteredContradictionName = ContradictionName.filter(
+		(item2) => !BothContradiction.some((item3) => item3.assetCode === item2.assetCode)
+	)
 	const removeAssetName = existData.filter(
 		(obj) => !ContradictionName.some((item) => item.serial === obj.serial)
 	)
@@ -405,10 +413,11 @@ const ExcelReader = () => {
 					{existData.length > 0 && <CheckList sampleData={existData} />}
 				</div>
 				<Table
-					existData={filteredExistData}
-					contradictionName={ContradictionName}
-					contradictionCategory={ContradictionCategory}
-				/>
+				existData={filteredExistData}
+				bothContradiction={BothContradiction}
+				contradictionName={filteredContradictionName}
+				contradictionCategory={filteredContradictionCategory}
+			/>
 			</div>
 		</>
 	)

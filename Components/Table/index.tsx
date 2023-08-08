@@ -1,4 +1,3 @@
-/** @format */
 
 import React from 'react'
 
@@ -6,12 +5,14 @@ interface TableProps {
 	existData: { [key: string]: string }[]
 	contradictionName: { [key: string]: string }[]
 	contradictionCategory: { [key: string]: string }[]
+	bothContradiction: { [key: string]: string }[]
 }
 
 const Table: React.FC<TableProps> = ({
-	existData,
+	existData, 
 	contradictionName,
 	contradictionCategory,
+	bothContradiction
 }) => {
 	return (
 		<table className='contradiction-table'>
@@ -22,6 +23,21 @@ const Table: React.FC<TableProps> = ({
 				</tr>
 			</thead>
 			<tbody>
+			{bothContradiction.map((row, index) => (
+					<tr key={index}>
+						{Object.entries(row).map(([key, value], index) => (
+							<td
+								key={index}
+								style={
+					 				key === 'assetName'|| key === 'category'
+										? { backgroundColor: '#fc9003' }
+										: undefined
+								}>
+								{value}
+							</td>
+						))}
+					</tr>
+				))}
 				{contradictionName.map((row, index) => (
 					<tr key={index}>
 						{Object.entries(row).map(([key, value], index) => (

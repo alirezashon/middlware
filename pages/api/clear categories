@@ -1,0 +1,48 @@
+const mistakeData: any[] = []
+
+const errorCells = await page.$$('.tblHOT.htInvalid')
+
+if (errorCells.length > 0) {
+	for (const cell of errorCells) {
+		const text = await cell.evaluate(
+			(el: Element | null) => el?.textContent?.trim() ?? ''
+		)
+		mistakeData.push(text)
+		console.log('Text:', text)
+
+		// Get the index of the parent <tr> element
+		const rowIndex = await cell.evaluate((el) => {
+			const row = el.parentElement
+			if (row) {
+				const parentRow = row.parentElement
+				return Array.from(parentRow?.children || []).indexOf(row)
+			}
+			return -1
+		})
+
+		if (rowIndex !== -1) {
+			const rows = await page.$$('tbody tr')
+			const invalidRow = rows[rowIndex]
+			if (invalidRow) {
+				const invalidCells = await invalidRow.$$('td')
+				for (const invalidCell of invalidCells) {
+					await invalidCell.evaluate((td) => {
+						td.textContent = '' // Clear the text content of the <td> element
+					})
+					await invalidCell.evaluate((td) => {
+						td.classList.remove('htInvalid') // Remove the .htInvalid class
+						td.classList.add('tblHOT') // Add the .tblHOT class
+					})
+				}
+			}
+		}
+	}
+	await page.click('#FormImportAssetFormViewbtnSave')
+} else {
+	console.log('No elements with class name found.')
+}
+
+// Click the final button
+
+console.log(mistakeData)
+return mistakeData
